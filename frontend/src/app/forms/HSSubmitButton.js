@@ -1,12 +1,11 @@
 "use client";
 import React from "react";
 
-const SubmitButton = ({ children = "Submit", ...props }) => {
+const SubmitButton = ({ children }) => {
   return (
     <button
-      className="mt-4 text-xl font-medium text-white rounded-md cursor-pointer bg-blue-950 h-[53px] w-[125px] max-md:text-lg max-sm:text-base"
       type="submit"
-      {...props}
+      className="px-7 py-5 text-xl font-medium text-center text-white whitespace-nowrap rounded-md bg-blue-950 hover:bg-blue-900 transition-colors max-md:px-5"
     >
       {children}
     </button>
