@@ -16,16 +16,19 @@ class Activity(BaseModel):
     description: str
     link: str
 
-
 class CategoryActivities(BaseModel):
     category: str
     activities: List[Activity]
 
+class MultiCategoryActivities(BaseModel):
+    activities: List[CategoryActivities]
 
-def prompt_gemini(
-    user_prompt="Find opportunities for aspiring Software Engineers near Irvine across Hackathons, Clubs, and Volunteer Projects that help college students build real skills, grow their careers, and meet new people.",
-    location="Irvine, CA",
-):
+
+def prompt_gemini_college(user_prompt="Find opportunities for aspiring Software Engineers near Irvine across Hackathons, Clubs, and Volunteer Projects that help college students build real skills, grow their careers, and meet new people.",
+                   location="Irvine, CA", uni="UCI", major="Computer Science",
+                   goal="software engineering", company="Google", grad="N/A",
+                   exp="N/A", clubs="Hack at UCI", courses="Data Structures, Algorithms",
+                   skills="Python, Java, C++", orgs="N/A", other="N/A"):
     full_prompt = f"""
 You are an assistant that recommends multiple **activities, events, or opportunities** for each category.
 
@@ -50,6 +53,19 @@ class Activity(BaseModel):
 - Balance popular and hidden gems.
 - Make sure the description clearly shows why it's relevant to the goal.
 
+User's past experiences for consideration:
+- College: {uni}
+- Major: {major}
+- Career Goal: {goal}
+- Company: {company}
+- Grad School: {grad}
+- Experience: {exp}
+- Clubs: {clubs}
+- Courses: {courses}
+- Skills: {skills}
+- Organizations: {orgs}
+- Other: {other}
+
 Respond ONLY with the JSON object — no extra text.
 
 User prompt: {user_prompt}
@@ -59,6 +75,7 @@ User prompt: {user_prompt}
         contents=full_prompt,
         config={
             "response_mime_type": "application/json",
+            "response_schema": MultiCategoryActivities,
         },
     )
     return response.text.strip()
@@ -66,5 +83,5 @@ User prompt: {user_prompt}
 
 if __name__ == "__main__":
     user_prompt = "Find opportunities for aspiring Software Engineers near Irvine across Hackathons, Clubs, and Volunteer Projects that help college students build real skills, grow their careers, and meet new people."
-    result = prompt_gemini(user_prompt)
+    result = prompt_gemini_college(user_prompt)
     print(result)
