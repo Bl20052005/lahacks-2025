@@ -6,6 +6,7 @@ import BackgroundImage from "./BackgroundImage";
 import Link from "next/link";
 import Layer from "@/components/layer";
 import Skew from "@/components/Skew";
+import { App } from "@/components/nodes";
 
 function HomePage() {
   return (
@@ -23,7 +24,9 @@ function HomePage() {
       <div className="relative w-full h-[600px] max-md:hidden">
         <div className="absolute top-[160px] left-[80px] w-[600px] h-[600px]">
           <Skew>
-            <Layer />
+            <div className="w-[600px] h-[600px]">
+              <App />
+            </div>
           </Skew>
         </div>
         <div className="absolute top-[80px] left-[40px] w-[600px] h-[600px]">
