@@ -22,7 +22,7 @@ const CreateAccountHighSchool = () => {
         <img
           src="https://cdn.builder.io/api/v1/image/assets/TEMP/f889e319d79bf5e19de58793acb908f20457fb63?placeholderIfAbsent=true&apiKey=290f4fffa0494176920e5dddabb4296c"
           alt="Logo"
-          className="object-contain max-w-full aspect-[2.95] w-[177px]"
+          className="object-contain relative z-10 max-w-full aspect-[2.95] w-[177px]"
         />
 
         <form
