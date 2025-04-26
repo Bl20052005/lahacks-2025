@@ -21,26 +21,6 @@ function HomePage() {
         <HeroSection />
       </BackgroundImage>
 
-      <div className="relative w-full h-[600px] max-md:hidden">
-        <div className="absolute top-[160px] left-[80px] w-[600px] h-[600px]">
-          <Skew>
-            <div className="w-[600px] h-[600px]">
-              <App />
-            </div>
-          </Skew>
-        </div>
-        <div className="absolute top-[80px] left-[40px] w-[600px] h-[600px]">
-          <Skew>
-            <Layer />
-          </Skew>
-        </div>
-        <div className="absolute top-0 left-0 w-[600px] h-[600px]">
-          <Skew>
-            <Layer />
-          </Skew>
-        </div>
-      </div>
-
       <section className="flex flex-col items-start px-16 pt-28 pb-60 mt-0 w-full bg-black text-white max-md:px-5 max-md:py-24 max-md:max-w-full">
         <div className="ml-3 max-md:max-w-full">
           <FeatureSection

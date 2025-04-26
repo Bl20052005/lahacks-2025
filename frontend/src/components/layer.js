@@ -2,12 +2,15 @@
 
 import React, { useCallback, useState } from "react";
 import {
-  addEdge,
-  MiniMap,
-  Controls,
   Background,
   ReactFlow,
+  addEdge,
+  ConnectionLineType,
+  Panel,
+  useNodesState,
+  useEdgesState,
 } from "@xyflow/react";
+import dagre from "@dagrejs/dagre";
 import "@xyflow/react/dist/style.css";
 import Node from "./Node";
 import Drawer from "@mui/material/Drawer";
@@ -24,12 +27,30 @@ const initialNodes = [
   {
     id: getId(),
     data: { label: "Start Node" },
-    position: { x: 250, y: 5 },
+    position: { x: 0, y: 0 },
+    width: 172,
+    height: 36,
   },
   {
     id: getId(),
     data: { label: "End Node" },
-    position: { x: 100, y: 5 },
+    position: { x: 0, y: 0 },
+    width: 172,
+    height: 36,
+  },
+  {
+    id: getId(),
+    data: { label: "End Node" },
+    position: { x: 0, y: 0 },
+    width: 172,
+    height: 36,
+  },
+  {
+    id: getId(),
+    data: { label: "End Node" },
+    position: { x: 0, y: 0 },
+    width: 172,
+    height: 36,
   },
 ];
 
@@ -38,19 +59,6 @@ const initialCheckMarkItems = [
   { item: "example question", checked: false },
   { item: "example question", checked: false },
 ];
-
-const a = {
-  id: "string",
-  label: "string",
-  position: { x: 0, y: 0 },
-  children: ["id", "id"],
-
-  data: {
-    checkMarkItems: ["string", "string"],
-  },
-
-  
-};
 
 // Add an edge from Start Node to End Node with an arrow
 const initialEdges = [
@@ -61,11 +69,66 @@ const initialEdges = [
     animated: false,
     markerEnd: { type: "arrowclosed" },
   },
+  {
+    id: "e0-2",
+    source: "node_0",
+    target: "node_2",
+    animated: false,
+    markerEnd: { type: "arrowclosed" },
+  },
+  {
+    id: "e0-3",
+    source: "node_0",
+    target: "node_3",
+    animated: true,
+    markerEnd: { type: "arrowclosed" },
+  },
 ];
 
+const dagreGraph = new dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
+const nodeWidth = 272;
+const nodeHeight = 66;
+
+const getLayoutedElements = (nodes, edges, direction = "TB") => {
+  const isHorizontal = direction === "LR";
+  dagreGraph.setGraph({ rankdir: direction });
+
+  nodes.forEach((node) => {
+    dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
+  });
+
+  edges.forEach((edge) => {
+    dagreGraph.setEdge(edge.source, edge.target);
+  });
+
+  dagre.layout(dagreGraph);
+
+  const newNodes = nodes.map((node) => {
+    const nodeWithPosition = dagreGraph.node(node.id);
+    const newNode = {
+      ...node,
+      targetPosition: isHorizontal ? "left" : "top",
+      sourcePosition: isHorizontal ? "right" : "bottom",
+      position: {
+        x: nodeWithPosition.x - nodeWidth / 2,
+        y: nodeWithPosition.y - nodeHeight / 2,
+      },
+    };
+
+    return newNode;
+  });
+
+  return { nodes: newNodes, edges };
+};
+
 const Layer = () => {
-  const [nodes, setNodes] = useState(initialNodes);
-  const [edges, setEdges] = useState(initialEdges);
+  const layoutedEdges = getLayoutedElements(initialNodes, initialEdges).edges;
+  const layoutedNodes = getLayoutedElements(initialNodes, initialEdges).nodes;
+
+  const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
+
+  console.log(edges, nodes);
 
   // Modal state
   const [modalOpen, setModalOpen] = useState(false);
@@ -82,7 +145,15 @@ const Layer = () => {
         i === index ? { ...item, checked: !item.checked } : item
       )
     );
+
     // TODO: call backend API here
+    // If all checkmarks are checked, close the modal
+    const allChecked = checkMarkItems.every((item, i) =>
+      i === index ? !item.checked : item.checked
+    );
+    if (allChecked) {
+      setModalOpen(false);
+    }
   };
 
   // Open modal on node click
@@ -92,11 +163,21 @@ const Layer = () => {
   }, []);
 
   return (
-    <div style={{ width: "100%", height: "600px", position: "relative", background: "#f0f0f0" }}>
+    <div
+      style={{
+        width: "100%",
+        height: "600px",
+        position: "relative",
+        background: "#f0f0f0",
+      }}
+    >
       <ReactFlow
         nodes={nodes}
-        edges={edges}
+        edges={initialEdges}
         onNodeClick={handleNodeClick}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        fitViewOptions={{ padding: 0 }}
       ></ReactFlow>
       {modalOpen && (
         <Box
