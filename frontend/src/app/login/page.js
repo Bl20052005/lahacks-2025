@@ -1,6 +1,7 @@
 "use client";
 import * as React from "react";
 import { LoginForm } from "./LoginForm";
+import Link from "next/link";
 
 export default function LoginPage() {
   return (
@@ -9,11 +10,13 @@ export default function LoginPage() {
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
         rel="stylesheet"
       />
-      <img
-        src="https://cdn.builder.io/api/v1/image/assets/TEMP/c0b5f620c505a6895b2c6461013531d7cbdf3268?placeholderIfAbsent=true"
-        className="absolute h-[60px] left-[29px] top-[26px] w-[177px] max-sm:h-10 max-sm:w-[120px]"
-        alt="Logo"
-      />
+      <Link href="/">
+        <img
+          src="https://cdn.builder.io/api/v1/image/assets/TEMP/c0b5f620c505a6895b2c6461013531d7cbdf3268?placeholderIfAbsent=true"
+          className="absolute h-[60px] left-[29px] top-[26px] w-[177px] max-sm:h-10 max-sm:w-[120px]"
+          alt="Logo"
+        />
+      </Link>
       <LoginForm />
     </main>
   );
