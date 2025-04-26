@@ -6,8 +6,55 @@ import FormColumn from "./FormColumn";
 import SubmitButton from "./SubmitButton";
 
 const CreateAccountHighSchool = () => {
-  const handleSubmit = (e) => {
+  const [formData, setFormData] = React.useState({
+    college: "",
+    year: "",
+    major: "",
+    gpa: "",
+    careers: "",
+    companies: "",
+    graduateSchool: "",
+    internshipExperience: "",
+    clubsLeadership: "",
+    coursework: "",
+    skills: "",
+    volunteerActivities: "",
+    organizations: "",
+    other: ""
+  });
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:5000/college-form", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      const result = await response.json();
+      
+      if (response.ok) {
+        console.log("Form submitted successfully", result);
+        // Optionally reset form or show success message
+      } else {
+        console.error("Submission failed", result.error);
+        // Optionally show error message to user
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      // Optionally show network error to user
+    }
   };
 
   return (
@@ -30,66 +77,129 @@ const CreateAccountHighSchool = () => {
         >
           <div className="max-w-full w-full">
             <div className="flex gap-5 max-md:flex-col">
-              <FormColumn>
-                <FormSection title="Core Info*">
-                  <div className="flex gap-5 max-md:flex-col">
-                    <InputField label="What college do you attend?" />
-                    <InputField label="What year are you in college?" />
-                  </div>
-                  <div className="flex gap-5 mt-5 max-md:flex-col">
-                    <InputField label="What is your major?" />
-                    <InputField label="Current GPA?" />
-                  </div>
-                </FormSection>
-
-                <FormSection title="Career Planning">
-                  <div className="flex gap-5 max-md:flex-col">
-                    <InputField label="What careers are you interested in?" />
-                    <InputField label="Are there any specific companies you want to work at?" />
-                  </div>
-                  <div className="flex gap-5 mt-5 max-md:flex-col">
-                    <InputField label="Are you planning to attend graduate school? (medical school, law school, etc.)" />
-                  </div>
-                </FormSection>
-
-                <FormSection title="Experience">
-                    <div className="flex gap-5 max-md:flex-col">
-                        <InputField
-                        label="Any internship or research experience? If so, please elaborate."
-                        multiline
-                        className="h-28"
-                        />
-                    </div>
-                    <div className="flex gap-5 mt-5 max-md:flex-col">
-                        <InputField
-                        label="What clubs are you involved in and do you hold any leadership positions?"
-                        multiline
-                        className="h-28"
-                        />
-                    </div>
-                </FormSection>
-
-
-                <FormSection title="Skills">
-                  <div className="flex gap-5 max-md:flex-col">
-                    <InputField label="Relevant coursework?" />
-                    <InputField label="General skills?" />
-                  </div>
-                </FormSection>
-
-                <FormSection title="Extracurriculars">
-                  <div className="flex gap-5 max-md:flex-col">
-                    <InputField label="Volunteer Activities?" />
-                    <InputField label="Organizations and societies?" />
-                  </div>
-                </FormSection>
-
-                <FormSection title="Other">
-                  <InputField
-                    multiline={true}
-                    className="h-24 w-full"
+                          <FormColumn>
+              <FormSection title="Core Info*">
+                <div className="flex gap-5 max-md:flex-col">
+                  <InputField 
+                    name="college"
+                    label="What college do you attend?"
+                    value={formData.college}
+                    onChange={handleInputChange}
                   />
-                </FormSection>
+                  <InputField 
+                    name="year"
+                    label="What year are you in college?"
+                    value={formData.year}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="flex gap-5 mt-5 max-md:flex-col">
+                  <InputField 
+                    name="major"
+                    label="What is your major?"
+                    value={formData.major}
+                    onChange={handleInputChange}
+                  />
+                  <InputField 
+                    name="gpa"
+                    label="Current GPA?"
+                    value={formData.gpa}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </FormSection>
+
+              <FormSection title="Career Planning">
+                <div className="flex gap-5 max-md:flex-col">
+                  <InputField 
+                    name="careers"
+                    label="What careers are you interested in?"
+                    value={formData.careers}
+                    onChange={handleInputChange}
+                  />
+                  <InputField 
+                    name="companies"
+                    label="Are there any specific companies you want to work at?"
+                    value={formData.companies}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="flex gap-5 mt-5 max-md:flex-col">
+                  <InputField 
+                    name="graduateSchool"
+                    label="Are you planning to attend graduate school? (medical school, law school, etc.)"
+                    value={formData.graduateSchool}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </FormSection>
+
+              <FormSection title="Experience">
+                <div className="flex gap-5 max-md:flex-col">
+                  <InputField
+                    name="internshipExperience"
+                    label="Any internship or research experience? If so, please elaborate."
+                    multiline
+                    className="h-28"
+                    value={formData.internshipExperience}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="flex gap-5 mt-5 max-md:flex-col">
+                  <InputField
+                    name="clubsLeadership"
+                    label="What clubs are you involved in and do you hold any leadership positions?"
+                    multiline
+                    className="h-28"
+                    value={formData.clubsLeadership}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </FormSection>
+
+              <FormSection title="Skills">
+                <div className="flex gap-5 max-md:flex-col">
+                  <InputField 
+                    name="coursework"
+                    label="Relevant coursework?"
+                    value={formData.coursework}
+                    onChange={handleInputChange}
+                  />
+                  <InputField 
+                    name="skills"
+                    label="General skills?"
+                    value={formData.skills}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </FormSection>
+
+              <FormSection title="Extracurriculars">
+                <div className="flex gap-5 max-md:flex-col">
+                  <InputField 
+                    name="volunteerActivities"
+                    label="Volunteer Activities?"
+                    value={formData.volunteerActivities}
+                    onChange={handleInputChange}
+                  />
+                  <InputField 
+                    name="organizations"
+                    label="Organizations and societies?"
+                    value={formData.organizations}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </FormSection>
+
+              <FormSection title="Other">
+                <InputField
+                  name="other"
+                  multiline={true}
+                  className="h-24 w-full"
+                  value={formData.other}
+                  onChange={handleInputChange}
+                />
+              </FormSection>
               </FormColumn>
             </div>
           </div>
