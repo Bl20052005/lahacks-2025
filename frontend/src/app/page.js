@@ -3,7 +3,8 @@ import NavigationBar from "./NavigationBar";
 import HeroSection from "./HeroSection";
 import FeatureSection from "./FeatureSection";
 import BackgroundImage from "./BackgroundImage";
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
+import { Link as ScrollLink } from "react-scroll"; 
 
 function HomePage() {
   return (
@@ -15,7 +16,32 @@ function HomePage() {
       >
         <NavigationBar />
         <HeroSection />
+
+      <div className="flex justify-center mt-10">
+        <ScrollLink
+          to="features-section"
+          smooth={true}
+          duration={500}
+          className="cursor-pointer animate-bounce"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            className="w-8 h-8 text-blue-500"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </ScrollLink>
+      </div>
       </BackgroundImage>
+
 
       <BackgroundImage
         src="/w2.png"
@@ -23,7 +49,7 @@ function HomePage() {
         className="flex flex-col items-center pt-11 pr-20 pb-72 pl-9 w-full text-xl font-normal text-center text-white min-h-[898px] max-md:px-5 max-md:pb-24 max-md:max-w-full"
       >
 
-        <section className="flex flex-col items-start px-8 pt-80 pb-60 w-full text-white gap-y-80 max-md:px-5 max-md:py-24 max-md:max-w-full">
+        <section id="features-section" className="flex flex-col items-start px-8 pt-80 pb-60 w-full text-white gap-y-80 max-md:px-5 max-md:py-24 max-md:max-w-full">
           <motion.div
             className="relative max-md:max-w-full text-left"
             initial={{ opacity: 0, y: 50 }}
@@ -41,7 +67,6 @@ function HomePage() {
             />
           </motion.div>
 
-          {/* Feature 2 with Animation */}
           <motion.div
             className="relative max-md:max-w-full text-left"
             initial={{ opacity: 0, y: 50 }}
@@ -85,6 +110,8 @@ function HomePage() {
           transition={{ duration: 1 }}
         />
       </BackgroundImage>
+
+
     </main>
   );
 }
