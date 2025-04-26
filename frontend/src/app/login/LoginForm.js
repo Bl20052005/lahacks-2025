@@ -34,7 +34,6 @@ export function LoginForm() {
   
       if (response.ok) {
         console.log("Login successful:", result);
-        router.push("/dashboard"); // Redirect to the dashboard or another page after successful login
       } else {
         console.error("Login failed:", result.error);
       }

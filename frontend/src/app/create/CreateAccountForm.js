@@ -29,7 +29,7 @@ const CreateAccountForm = () => {
   
       if (response.ok) {
         console.log("Account created:", result);
-        router.push("/login");
+        router.push("/login"); // Redirect to the login page after successful signup
       } else {
         console.error("Signup failed:", result.error);
       }

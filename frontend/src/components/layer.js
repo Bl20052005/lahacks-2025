@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Background,
   ReactFlow,
@@ -18,10 +18,14 @@ import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { motion } from "framer-motion";
+import "./layer.css";
+import axios from "axios";
 
 // Helper to generate unique node ids
 let id = 0;
 const getId = () => `node_${id++}`;
+
+const className = "bg-blue-950 text-white rounded-md px-4 py-2";
 
 const initialNodes = [
   {
@@ -166,9 +170,12 @@ const Layer = () => {
     <div
       style={{
         width: "100%",
-        height: "600px",
+        height: "100%",
         position: "relative",
-        background: "#f0f0f0",
+        background: "#001840",
+        borderRadius: "8px",
+        border: "2px solid #222",
+        padding: "16px",
       }}
     >
       <ReactFlow
