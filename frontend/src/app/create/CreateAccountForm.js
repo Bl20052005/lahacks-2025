@@ -27,7 +27,7 @@ const CreateAccountForm = () => {
     <div className="h-screen w-screen flex justify-center items-center overflow-hidden bg-[url('bkgd2.jpg')] bg-cover bg-center bg-no-repeat">
       <form
         onSubmit={handleSubmit}
-        className="flex relative flex-col items-start self-center px-14 pt-16 pb-7 mt-11 mb-0 ml-10 max-w-full rounded-md bg-neutral-200 shadow-[0px_4px_4px_rgba(0,0,0,0.25)] w-[483px] max-md:px-5 max-md:mt-10 max-md:mb-2.5"
+        className="flex relative flex-col items-start self-center px-14 pt-16 pb-7 mt-11 mb-0 max-w-full rounded-md bg-neutral-200 shadow-[0px_4px_4px_rgba(0,0,0,0.25)] w-[483px] max-md:px-5 max-md:mt-10 max-md:mb-2.5"
       >
         <h1 className="text-3xl font-semibold text-neutral-800">Get started</h1>
         <div className="w-full space-y-7 mt-10">
