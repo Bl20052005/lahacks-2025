@@ -3,7 +3,6 @@ import NavigationBar from "./NavigationBar";
 import HeroSection from "./HeroSection";
 import FeatureSection from "./FeatureSection";
 import BackgroundImage from "./BackgroundImage";
-import Link from "next/link";
 import Layer from "@/components/layer";
 import Skew from "@/components/Skew";
 import { App } from "@/components/nodes";
@@ -12,7 +11,7 @@ function HomePage() {
   return (
     <main className="overflow-hidden bg-white">
       <BackgroundImage
-        src="https://cdn.builder.io/api/v1/image/assets/TEMP/7a73509fb8a43c9f2a1dd64067f4693f63cef23e?placeholderIfAbsent=true&apiKey=290f4fffa0494176920e5dddabb4296c"
+      src="/w1.png"
         className="flex flex-col items-center pt-11 pr-20 pb-72 pl-9 w-full
           text-xl font-medium text-center text-white min-h-[898px] max-md:px-5
           max-md:pb-24 max-md:max-w-full"
