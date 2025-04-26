@@ -1,0 +1,11 @@
+.react-flow__node {
+  background: #002c6e;
+  color: white;
+}
+
+.react-flow__edges {
+  background-color: #0054d3;
+  stroke: #0054d3;
+  fill: #0054d3;
+  stroke-width: 2px;
+}
