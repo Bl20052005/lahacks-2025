@@ -48,6 +48,8 @@ const a = {
   data: {
     checkMarkItems: ["string", "string"],
   },
+
+  
 };
 
 // Add an edge from Start Node to End Node with an arrow
@@ -90,7 +92,7 @@ const Layer = () => {
   }, []);
 
   return (
-    <div style={{ width: "100%", height: "600px", position: "relative" }}>
+    <div style={{ width: "100%", height: "600px", position: "relative", background: "#f0f0f0" }}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
