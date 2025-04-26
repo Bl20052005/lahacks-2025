@@ -1,17 +1,19 @@
 "use client";
 import React from "react";
 
-const InputField = ({ label, multiline = false, className = "" }) => {
+const InputField = ({ label, multiline = false, className = "", ...props }) => {
   return (
-    <div className="flex flex-col w-full">
-      {label && <label className="mb-4 text-base text-black">{label}</label>}
+    <div className="flex flex-col flex-1 w-full">
+      {label && <label className="mb-2 text-sm font-medium text-gray-700">{label}</label>}
       {multiline ? (
         <textarea
-          className={`flex shrink-0 rounded-md border border-solid border-neutral-400 bg-zinc-300 bg-opacity-0 px-3 py-2 text-black ${className}`}
+          className={`flex w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white ${className}`}
+          {...props}
         />
       ) : (
         <input
-          className={`flex shrink-0 h-[38px] rounded-md border border-solid border-neutral-400 bg-zinc-300 bg-opacity-0 px-3 py-2 text-black ${className}`}
+          className={`flex w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white ${className}`}
+          {...props}
         />
       )}
     </div>

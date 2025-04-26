@@ -6,7 +6,7 @@ export function FormInput({ label, type = "text", value, onChange }) {
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="px-2.5 py-0 w-full text-base rounded-md border border-solid bg-zinc-300 bg-opacity-0 border-neutral-400 h-[47px]"
+        className="px-2.5 py-0 w-full text-base rounded-md border border-solid bg-zinc-300 bg-opacity-0 border-neutral-400 h-[47px] text-black"
       />
     </div>
   );
