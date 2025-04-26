@@ -22,7 +22,7 @@ const HeroSection = () => {
       <Link href="/create">
         <button
           onClick={handleGetStarted}
-          className="relative px-5 py-6 mt-12 mb-0 max-w-full rounded-md bg-blue-950 w-[146px] max-md:mt-10 max-md:mb-2.5 hover:bg-blue-900 transition-colors"
+          className="relative px-5 py-6 mt-12 mb-0 max-w-full rounded-md bg-blue-950 w-[170px] max-md:mt-10 max-md:mb-2.5 hover:bg-blue-900 transition-colors"
           aria-label="Get Started"
         >
           Get Started
