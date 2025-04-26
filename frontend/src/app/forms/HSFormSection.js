@@ -3,7 +3,7 @@ import React from "react";
 
 const FormSection = ({ title, children }) => {
   return (
-    <section className="mb-8">
+    <section className="mb-8 w-full">
       {title && (
         <header className="text-3xl font-bold text-black mb-10">{title}</header>
       )}

@@ -29,69 +29,59 @@ const CreateAccountHighSchool = () => {
           onSubmit={handleSubmit}
           className="flex relative flex-col items-start self-center px-16 pt-11 pb-7 mt-24 -mb-7 w-full rounded-3xl bg-neutral-200 max-w-[1096px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)] max-md:px-5 max-md:mt-10 max-md:mb-2.5 max-md:max-w-full"
         >
-          <div className="max-w-full w-[808px]">
+          <div className="max-w-full w-full">
             <div className="flex gap-5 max-md:flex-col">
               <FormColumn>
                 <FormSection title="Core Info">
-                  <InputField label="What high school are you going to?" />
-                  <InputField label="Where do you live?" />
+                  <div className="flex gap-5 max-md:flex-col">
+                    <InputField label="What high school are you going to?" />
+                    <InputField label="What year are you in high school?" />
+                  </div>
+                  <div className="flex gap-5 mt-5 max-md:flex-col">
+                    <InputField label="Where do you live?" />
+                  </div>
                 </FormSection>
 
                 <FormSection title="Interests & Goals">
-                  <InputField label="What careers are you interested in?" />
+                  <div className="flex gap-5 max-md:flex-col">
+                    <InputField label="What careers are you interested in?" />
+                    <InputField label="What college do you aspire to attend?" />
+                  </div>
                 </FormSection>
 
                 <FormSection title="Extracurriculars">
-                  <InputField label="Club involvement?" />
-                  <InputField label="Volunteer activities?" />
-                </FormSection>
-              </FormColumn>
-
-              <FormColumn>
-                <div className="flex flex-col self-stretch my-auto text-base text-black max-md:mt-10">
-                  <div className="mt-16 max-md:mt-20">
-                    <InputField label="What year are you in high school?" />
-                  </div>
-                  <div className="mt-40 max-md:mt-10">
-                    <InputField label="What college do you aspire to attend?" />
-                  </div>
-                  <div className="mt-40 max-md:mt-10">
+                  <div className="flex gap-5 max-md:flex-col">
+                    <InputField label="Club involvement?" />
                     <InputField label="Sports?" />
                   </div>
-                </div>
-              </FormColumn>
-            </div>
-          </div>
+                  <div className="flex gap-5 mt-5 max-md:flex-col">
+                    <InputField label="Volunteer activities?" />
+                  </div>
+                </FormSection>
 
-          <div className="mt-10 max-w-full w-[808px] max-md:mt-10">
-            <div className="flex gap-5 max-md:flex-col">
-              <FormColumn>
                 <FormSection title="Skills">
-                  <InputField label="Relevant coursework (AP, honors, community college)?" />
+                  <div className="flex gap-5 max-md:flex-col">
+                    <InputField label="Relevant coursework (AP, honors, community college)?" />
+                    <InputField label="General skills?" />
+                  </div>
                 </FormSection>
 
                 <FormSection title="Awards & Certificates">
-                  <InputField label="Competition and awards?" />
-                </FormSection>
-              </FormColumn>
-
-              <FormColumn>
-                <div className="flex flex-col grow mt-16 text-base text-black max-md:mt-10">
-                  <InputField label="General skills?" />
-                  <div className="mt-20 max-md:mt-10">
+                  <div className="flex gap-5 max-md:flex-col">
+                    <InputField label="Competition and awards?" />
                     <InputField label="Certifications?" />
                   </div>
-                </div>
+                </FormSection>
+
+                <FormSection title="Other">
+                  <InputField
+                    multiline={true}
+                    className="h-24 w-full"
+                  />
+                </FormSection>
               </FormColumn>
             </div>
           </div>
-
-          <FormSection title="Other">
-            <InputField
-              multiline={true}
-              className="h-24 w-[808px] max-w-full"
-            />
-          </FormSection>
 
           <SubmitButton>Submit</SubmitButton>
         </form>
