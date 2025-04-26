@@ -1,4 +1,14 @@
+"use client";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+
 const HeroSection = () => {
+  const router = useRouter();
+
+  const handleGetStarted = () => {
+    router.push("/create");
+  };
+
   return (
     <section className="text-center">
       <h1 className="relative mt-60 text-7xl font-bold max-md:mt-10 max-md:text-4xl">
@@ -9,12 +19,15 @@ const HeroSection = () => {
         <br />
         Weaving your life path.
       </p>
-      <button
-        className="relative px-5 py-6 mt-12 mb-0 max-w-full rounded-md bg-blue-950 w-[146px] max-md:mt-10 max-md:mb-2.5 hover:bg-blue-900 transition-colors"
-        aria-label="Get Started"
-      >
-        Get Started
-      </button>
+      <Link href="/create">
+        <button
+          onClick={handleGetStarted}
+          className="relative px-5 py-6 mt-12 mb-0 max-w-full rounded-md bg-blue-950 w-[146px] max-md:mt-10 max-md:mb-2.5 hover:bg-blue-900 transition-colors"
+          aria-label="Get Started"
+        >
+          Get Started
+        </button>
+      </Link>
     </section>
   );
 };

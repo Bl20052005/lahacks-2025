@@ -10,12 +10,12 @@ function HomePage() {
     <main className="overflow-hidden bg-white">
       <BackgroundImage
         src="https://cdn.builder.io/api/v1/image/assets/TEMP/7a73509fb8a43c9f2a1dd64067f4693f63cef23e?placeholderIfAbsent=true&apiKey=290f4fffa0494176920e5dddabb4296c"
-        className="flex flex-col items-center pt-11 pr-20 pb-72 pl-9 w-full text-xl font-medium text-center text-white min-h-[898px] max-md:px-5 max-md:pb-24 max-md:max-w-full"
+        className="flex flex-col items-center pt-11 pr-20 pb-72 pl-9 w-full
+          text-xl font-medium text-center text-white min-h-[898px] max-md:px-5
+          max-md:pb-24 max-md:max-w-full"
       >
-        <Link href="/">
-          <NavigationBar />
-          <HeroSection />
-        </Link>
+        <NavigationBar />
+        <HeroSection />
       </BackgroundImage>
 
       <section className="flex flex-col items-start px-16 pt-28 pb-60 mt-0 w-full bg-black text-white max-md:px-5 max-md:py-24 max-md:max-w-full">

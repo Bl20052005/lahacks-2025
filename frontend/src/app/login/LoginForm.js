@@ -2,10 +2,12 @@
 import * as React from "react";
 import { FormInput } from "./FormInput";
 import { Button } from "./Button";
+import { useRouter } from "next/navigation";
 
 export function LoginForm() {
+  const router = useRouter();
   const [formData, setFormData] = React.useState({
-    email: "",
+    username: "",
     password: "",
   });
 
@@ -32,10 +34,10 @@ export function LoginForm() {
         </h1>
 
         <FormInput
-          label="Email"
-          type="email"
-          value={formData.email}
-          onChange={(value) => handleInputChange("email", value)}
+          label="Username"
+          type="username"
+          value={formData.username}
+          onChange={(value) => handleInputChange("Username", value)}
         />
 
         <FormInput
@@ -52,7 +54,7 @@ export function LoginForm() {
           <button
             type="button"
             className="font-bold text-blue-900 cursor-pointer"
-            onClick={() => console.log("Create account clicked")}
+            onClick={() => router.push("../create")}
           >
             Create account
           </button>
