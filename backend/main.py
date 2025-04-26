@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from pymongo import MongoClient
-
+import linked_spam
 
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
@@ -8,26 +8,22 @@ from pymongo.server_api import ServerApi
 uri = "mongodb+srv://arnavpandey722:MpLlSmce2gtrDD7j@cluster0.x0voiss.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 
 client = MongoClient(uri, server_api=ServerApi('1'))
+from flask import Flask, request, jsonify
+from flask_cors import CORS  # import this
+
+app = Flask(__name__)
+CORS(app, origins=["http://localhost:3000"])
+
 
 db = client['users']
 collection = db['users']
 
-app = Flask(__name__)
-
-@app.route('/register', methods=['GET'])
+@app.route('/register', methods=['POST'])
 def register():
-    # For testing purposes, hardcoding the username and password
-    # to simulate a registration request.
-    # Once login/registration is implemented, this should be removed.
-    # username = request.args.get('username')
-    # password = request.args.get('password')
-    # username = request.form.get('username')
-    # password = request.form.get('password')
-    # username = request.json.get('username')
-    # password = request.json.get('password')
-
-    username = "arnavpandey722"
-    password = "ilikecheese1234"
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+    education = data.get('education')  # Optional field
 
     if not username or not password:
         return jsonify({"error": "Username and password are required"}), 400
@@ -36,31 +32,20 @@ def register():
     if existing_user:
         return jsonify({"error": "User already exists"}), 400
 
-    if not username or not password:
-        return jsonify({"error": "Username and password are required"}), 400
-
     new_user = {
         "username": username,
         "password": password,
+        "education": education
     }
     result = collection.insert_one(new_user)
 
     return jsonify({"message": "User registered successfully", "user_id": str(result.inserted_id)}), 201
 
-@app.route('/login', methods=['GET'])
+@app.route('/login', methods=['POST'])
 def login():
-    # For testing purposes, hardcoding the username and password
-    # to simulate a registration request.
-    # Once login/registration is implemented, this should be removed.
-    # username = request.args.get('username')
-    # password = request.args.get('password')
-    # username = request.form.get('username')
-    # password = request.form.get('password')
-    # username = request.json.get('username')
-    # password = request.json.get('password')
-    
-    username = "arnavpandey722"
-    password = "ilikecheese1234"
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
 
     if not username or not password:
         return jsonify({"error": "Username and password are required"}), 400
@@ -71,6 +56,27 @@ def login():
 
     return jsonify({"message": "Login successful", "user_id": str(user['_id'])}), 200
 
+@app.route('/ld')
+def ld():
+    search_linkd = linked_spam.search_linkd(
+        query="software engineer",
+        limit=30
+    )
+    db2 = client['linkedin-data']
+    collection2 = db2['ld']
+
+    for item in search_linkd['results']:
+        collection2.insert_one(item)
+
+
+    return jsonify({"message": "LinkedIn data inserted successfully"}), 200
+
+@app.route('/ld/all', methods=['GET'])
+def get_all_linked_data():
+    db2 = client['linkedin-data']
+    collection2 = db2['ld']
+    all_data = list(collection2.find())
+    return jsonify(all_data), 200
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5001, threaded=False)
+    app.run(debug=True, port=5000, host='0.0.0.0')

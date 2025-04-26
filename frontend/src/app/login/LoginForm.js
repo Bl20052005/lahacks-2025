@@ -18,10 +18,30 @@ export function LoginForm() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-  };
+  
+    try {
+      const response = await fetch("http://localhost:5000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      const result = await response.json();
+  
+      if (response.ok) {
+        console.log("Login successful:", result);
+        router.push("/dashboard"); // Redirect to the dashboard or another page after successful login
+      } else {
+        console.error("Login failed:", result.error);
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
+  };  
 
   return (
     <form
@@ -37,7 +57,7 @@ export function LoginForm() {
           label="Username"
           type="username"
           value={formData.username}
-          onChange={(value) => handleInputChange("Username", value)}
+          onChange={(value) => handleInputChange("username", value)}
         />
 
         <FormInput

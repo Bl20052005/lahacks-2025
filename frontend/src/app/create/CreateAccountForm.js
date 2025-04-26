@@ -3,18 +3,40 @@ import React, { useState } from "react";
 import InputField from "./InputField";
 import RadioGroup from "./RadioGroup";
 import Button from "./Button";
+import { useRouter } from "next/navigation";
 
 const CreateAccountForm = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     username: "",
     password: "",
     education: "",
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-  };
+  
+    try {
+      const response = await fetch("http://localhost:5000/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      const result = await response.json();
+  
+      if (response.ok) {
+        console.log("Account created:", result);
+        router.push("/login");
+      } else {
+        console.error("Signup failed:", result.error);
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
+  };  
 
   const handleChange = (field) => (value) => {
     setFormData((prev) => ({
