@@ -32,9 +32,9 @@ const CreateAccountHighSchool = () => {
           <div className="max-w-full w-full">
             <div className="flex gap-5 max-md:flex-col">
               <FormColumn>
-                <FormSection title="Core Info">
+                <FormSection title="Core Info*">
                   <div className="flex gap-5 max-md:flex-col">
-                    <InputField label="What high school are you going to?" />
+                    <InputField label="What high school do you attend?" />
                     <InputField label="What year are you in high school?" />
                   </div>
                   <div className="flex gap-5 mt-5 max-md:flex-col">
