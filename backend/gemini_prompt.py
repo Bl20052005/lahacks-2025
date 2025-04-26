@@ -49,6 +49,9 @@ User prompt: {user_prompt}
     return response.text.strip()
 
 
+prompt = ""
+
+
 if __name__ == "__main__":
     # Example usage
     user_prompt = "The node below should have data about software engineering, as well as not be close to any nodes near (0,0) and (10,10)."
