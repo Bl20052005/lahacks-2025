@@ -16,13 +16,16 @@ class Activity(BaseModel):
     description: str
     link: str
 
+
 class CategoryActivities(BaseModel):
     category: str
     activities: List[Activity]
 
 
-def prompt_gemini(user_prompt="Find opportunities for aspiring Software Engineers near Irvine across Hackathons, Clubs, and Volunteer Projects that help college students build real skills, grow their careers, and meet new people.",
-                   location="Irvine, CA"):
+def prompt_gemini(
+    user_prompt="Find opportunities for aspiring Software Engineers near Irvine across Hackathons, Clubs, and Volunteer Projects that help college students build real skills, grow their careers, and meet new people.",
+    location="Irvine, CA",
+):
     full_prompt = f"""
 You are an assistant that recommends multiple **activities, events, or opportunities** for each category.
 
@@ -52,7 +55,7 @@ Respond ONLY with the JSON object — no extra text.
 User prompt: {user_prompt}
 """
     response = client.models.generate_content(
-        model="gemini-2.0-flash",
+        model="gemini-2.5-pro-exp-03-25",
         contents=full_prompt,
         config={
             "response_mime_type": "application/json",

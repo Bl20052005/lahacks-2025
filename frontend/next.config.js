@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+
+module.exports = {
   images: {
     domains: ["cdn.builder.io"],
   },
@@ -12,5 +13,3 @@ const nextConfig = {
     ];
   },
 };
-
-module.exports = nextConfig;

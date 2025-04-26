@@ -4,10 +4,11 @@ import linked_spam
 
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
+from location_query import prompt_gemini
 
 uri = "mongodb+srv://arnavpandey722:MpLlSmce2gtrDD7j@cluster0.x0voiss.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 
-client = MongoClient(uri, server_api=ServerApi('1'))
+client = MongoClient(uri, server_api=ServerApi("1"))
 from flask import Flask, request, jsonify
 from flask_cors import CORS  # import this
 
@@ -15,15 +16,16 @@ app = Flask(__name__)
 CORS(app, origins=["http://localhost:3000"])
 
 
-db = client['users']
-collection = db['users']
+db = client["users"]
+collection = db["users"]
 
-@app.route('/register', methods=['POST'])
+
+@app.route("/register", methods=["POST"])
 def register():
     data = request.get_json()
-    username = data.get('username')
-    password = data.get('password')
-    education = data.get('education')  # Optional field
+    username = data.get("username")
+    password = data.get("password")
+    education = data.get("education")  # Optional field
 
     if not username or not password:
         return jsonify({"error": "Username and password are required"}), 400
@@ -32,20 +34,25 @@ def register():
     if existing_user:
         return jsonify({"error": "User already exists"}), 400
 
-    new_user = {
-        "username": username,
-        "password": password,
-        "education": education
-    }
+    new_user = {"username": username, "password": password, "education": education}
     result = collection.insert_one(new_user)
 
-    return jsonify({"message": "User registered successfully", "user_id": str(result.inserted_id)}), 201
+    return (
+        jsonify(
+            {
+                "message": "User registered successfully",
+                "user_id": str(result.inserted_id),
+            }
+        ),
+        201,
+    )
 
-@app.route('/login', methods=['POST'])
+
+@app.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
-    username = data.get('username')
-    password = data.get('password')
+    username = data.get("username")
+    password = data.get("password")
 
     if not username or not password:
         return jsonify({"error": "Username and password are required"}), 400
@@ -54,29 +61,38 @@ def login():
     if not user:
         return jsonify({"error": "Invalid username or password"}), 401
 
-    return jsonify({"message": "Login successful", "user_id": str(user['_id'])}), 200
+    return jsonify({"message": "Login successful", "user_id": str(user["_id"])}), 200
 
-@app.route('/ld')
+
+@app.route("/ld")
 def ld():
-    search_linkd = linked_spam.search_linkd(
-        query="software engineer",
-        limit=30
-    )
-    db2 = client['linkedin-data']
-    collection2 = db2['ld']
+    search_linkd = linked_spam.search_linkd(query="software engineer", limit=30)
+    db2 = client["linkedin-data"]
+    collection2 = db2["ld"]
 
-    for item in search_linkd['results']:
+    for item in search_linkd["results"]:
         collection2.insert_one(item)
-
 
     return jsonify({"message": "LinkedIn data inserted successfully"}), 200
 
-@app.route('/ld/all', methods=['GET'])
+
+@app.route("/ld/all", methods=["GET"])
 def get_all_linked_data():
-    db2 = client['linkedin-data']
-    collection2 = db2['ld']
+    db2 = client["linkedin-data"]
+    collection2 = db2["ld"]
     all_data = list(collection2.find())
     return jsonify(all_data), 200
 
-if __name__ == '__main__':
-    app.run(debug=True, port=5000, host='0.0.0.0')
+
+@app.route("/api/location", methods=["POST"])
+def location():
+    data = request.get_json()
+    user_prompt = data.get("user_prompt")
+    location = data.get("location")
+
+    result = prompt_gemini(user_prompt, location if location is None else "Irvine, CA")
+    return jsonify(result), 200
+
+
+if __name__ == "__main__":
+    app.run(debug=True, port=5000, host="0.0.0.0")
