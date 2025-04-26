@@ -1,44 +1,20 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import * as React from "react";
+import { LoginForm } from "./LoginForm";
 
 export default function LoginPage() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const router = useRouter();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    // TODO: Replace with real backend call
-    if (username && password) {
-      router.push("/home");
-    }
-  };
-
   return (
-    <div className="max-w-md mx-auto mt-20 p-8 border rounded shadow">
-      <h1 className="text-2xl mb-4 font-bold">Login</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <input
-          className="border p-2 rounded"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          className="border p-2 rounded"
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button
-          className="bg-foreground text-background p-2 rounded"
-          type="submit"
-        >
-          Login
-        </button>
-      </form>
-    </div>
+    <main className="flex relative justify-center items-center mx-auto w-full max-w-none h-screen bg-cover bg-[url('https://cdn.builder.io/api/v1/image/assets/TEMP/c96a8df7614fe791248010feee8ff2c8f1a8b7d8?placeholderIfAbsent=true')] max-md:max-w-[991px] max-sm:max-w-screen-sm">
+      <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+      />
+      <img
+        src="https://cdn.builder.io/api/v1/image/assets/TEMP/c0b5f620c505a6895b2c6461013531d7cbdf3268?placeholderIfAbsent=true"
+        className="absolute h-[60px] left-[29px] top-[26px] w-[177px] max-sm:h-10 max-sm:w-[120px]"
+        alt="Logo"
+      />
+      <LoginForm />
+    </main>
   );
 }
