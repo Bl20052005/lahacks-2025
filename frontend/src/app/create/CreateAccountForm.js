@@ -72,7 +72,7 @@ const CreateAccountForm = () => {
         </div>
         <Button
           type="submit"
-          className="self-center mt-16 w-[187px] max-md:mt-10"
+          className="self-center mt-16 w-[200px] max-md:mt-10"
         >
           Create Account
         </Button>
