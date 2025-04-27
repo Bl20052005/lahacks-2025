@@ -39,6 +39,7 @@ collection = db["users"]
 
 @app.route("/api/register", methods=["POST"])
 def register():
+    global user_attrs
     data = request.get_json()
     username = data.get("username")
     password = data.get("password")
@@ -74,6 +75,8 @@ def register():
         },
     }
     result = collection.insert_one(new_user)
+
+    user_attrs = {"user_id": str(result.inserted_id), "user": ""}
 
     return (
         jsonify(
@@ -151,6 +154,8 @@ def college_form():
     collection3.find_one_and_update(
         {"_id": ObjectId(data["user_id"])}, {"$set": data}, upsert=True
     )
+    user_attrs = {"user_id": user_attrs["user_id"], "user": str(data)}
+
     return jsonify({"message": "Data inserted successfully"}), 200
 
 
@@ -194,6 +199,7 @@ def begin():
 
 @app.route("/api/hs-form", methods=["POST"])
 def hs_form():
+    global user_attrs
     data = request.get_json()
     if data is None:
         return jsonify({"error": "No data provided"}), 400
@@ -205,6 +211,7 @@ def hs_form():
     collection3.find_one_and_update(
         {"_id": ObjectId(data["user_id"])}, {"$set": data}, upsert=True
     )
+    user_attrs = {"user_id": user_attrs["user_id"], "user": str(data)}
     return jsonify({"message": "Data inserted successfully"}), 200
 
 

@@ -228,7 +228,6 @@ const Layer = ({ nodes, edges, nodeData, dispatchLayerStates, layer }) => {
         padding: "16px",
       }}
     >
-      <button onClick={fetchData}>fetchData</button>
       <ReactFlow
         nodes={nodes}
         edges={edges}
