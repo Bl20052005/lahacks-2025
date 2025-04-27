@@ -1,33 +1,12 @@
+import axios from "axios";
+
 export default async function getBackendLayers() {
-  return {
-    network: {
-      nodes: [],
-      edges: [],
-      nodeData: [],
-    },
-    apps: {
-      nodes: [],
-      edges: [],
-      nodeData: [],
-    },
-    goals: {
-      nodes: [],
-      edges: [],
-      nodeData: [],
-    },
-  };
+  console.log(localStorage.getItem("user_info"));
+  const res = await axios.post(`${process.env.API_URL}/api/flowchart`);
 
-  const res = await fetch("/api/layers", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (!res.ok) {
+  if (res.status !== 200) {
     throw new Error("Failed to fetch layers");
   }
-
-  const data = await res.json();
+  const data = res.data;
   return data;
 }

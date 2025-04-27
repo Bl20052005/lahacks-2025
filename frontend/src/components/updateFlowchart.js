@@ -1,23 +1,17 @@
 import axios from "axios";
 
-export default async function updateFlowchart(nodeData, nodes, edges) {
-  // Collect titles and checked statements from nodes with at least one checked checkbox
-  const updatedNodeData = nodeData
-    .filter(
-      (data) =>
-        Array.isArray(data.checkBox) && data.checkBox.some((cb) => cb.checked)
-    )
-    .map((data) => ({
-      title: data.title,
-      checkedStatements: data.checkBox
-        .filter((cb) => cb.checked)
-        .map((cb) => cb.label),
-    }))
-    .reduce((acc, curr) => {
-      return `${acc}${
-        curr.title
-      } has finished the following: ${curr.checkedStatements.join(", ")} `;
-    }, "");
+export default function updateFlowchart(method, data) {
+  if (method === "GET") {
+    axios
+      .get("/api/flowchart", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => res.data);
+  }
 
-  await axios.post("/api/update-nodes", { steps: updatedNodeData });
+  if (method === "POST") {
+    axios.post("/api/flowchart", data).then((res) => res.data);
+  }
 }

@@ -15,23 +15,27 @@ export default function HomeLayers({ initialLayers }) {
     const { type, layer, array, payload } = action;
     switch (type) {
       case "SET_ARRAY":
-        return {
+        const setUpdate = {
           ...state,
           [layer]: {
             ...state[layer],
             [array]: payload,
           },
         };
+        axios.post("/api/flowchart", setUpdate);
+        return setUpdate;
       case "ADD_ITEM":
-        return {
+        const addUpdate = {
           ...state,
           [layer]: {
             ...state[layer],
             [array]: [...state[layer][array], payload],
           },
         };
+        axios.post("/api/flowchart", addUpdate);
+        return addUpdate;
       case "REMOVE_ITEM":
-        return {
+        const removeUpdate = {
           ...state,
           [layer]: {
             ...state[layer],
@@ -42,8 +46,10 @@ export default function HomeLayers({ initialLayers }) {
             ),
           },
         };
+        axios.post("/api/flowchart", removeUpdate);
+        return removeUpdate;
       case "UPDATE_ITEM":
-        return {
+        const updateUpdate = {
           ...state,
           [layer]: {
             ...state[layer],
@@ -52,6 +58,8 @@ export default function HomeLayers({ initialLayers }) {
             ),
           },
         };
+        axios.post("/api/flowchart", updateUpdate);
+        return updateUpdate;
       default:
         return state;
     }

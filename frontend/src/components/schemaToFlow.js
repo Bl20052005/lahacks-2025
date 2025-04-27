@@ -6,8 +6,12 @@ const getId = () => `node_${id++}`;
  * @param {Array} categories - The input schema (array of categories with activities)
  * @returns {{ initialNodes: Array, initialEdges: Array }}
  */
-export function transformToFlowSchema(data) {
-  id = 0; // reset id counter for repeatable results
+export function transformToFlowSchema(
+  data,
+  numNodesBefore = 0,
+  ancestorId = null
+) {
+  id = numNodesBefore; // reset id counter for repeatable results
   let initialNodes = [];
   let nodeData = [];
   let initialEdges = [];
@@ -46,7 +50,18 @@ export function transformToFlowSchema(data) {
       id: startNodeId,
       description: datum.header,
       header: datum.header,
+      checkBox: [],
     });
+
+    if (ancestorId) {
+      initialEdges.push({
+        id: `e${ancestorId}-${startNodeId}`,
+        source: ancestorId,
+        target: startNodeId,
+        animated: false,
+        markerEnd: { type: "arrowclosed" },
+      });
+    }
 
     datum.data.forEach((datumOfData, actIdx) => {
       const nodeId = getId();
@@ -72,7 +87,7 @@ export function transformToFlowSchema(data) {
         nodeDatum.checkBox = datumOfData.checkBox.map((item) => {
           return {
             checked: false,
-            label: item
+            label: item,
           };
         });
       }

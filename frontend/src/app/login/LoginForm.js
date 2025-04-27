@@ -20,7 +20,7 @@ export function LoginForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       const response = await fetch("/api/login", {
         method: "POST",
@@ -29,11 +29,13 @@ export function LoginForm() {
         },
         body: JSON.stringify(formData),
       });
-  
+
       const result = await response.json();
-  
+
       if (response.ok) {
         console.log("Login successful:", result);
+        localStorage.setItem("user_info", result.user_info);
+
         router.push("/home");
       } else {
         console.error("Login failed:", result.error);
@@ -41,7 +43,7 @@ export function LoginForm() {
     } catch (error) {
       console.error("Error submitting form:", error);
     }
-  };  
+  };
 
   return (
     <form

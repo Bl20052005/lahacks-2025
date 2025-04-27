@@ -17,6 +17,7 @@ class Activity(BaseModel):
     link: str
     checkBox: List[str]
 
+
 class CategoryActivities(BaseModel):
     header: str
     data: List[Activity]
@@ -27,6 +28,7 @@ class MultiCategoryActivities(BaseModel):
 
 
 def prompt_gemini_college(
+    background={},
     user_prompt="Find opportunities for aspiring Software Engineers near Irvine across Hackathons, Clubs, and Volunteer Projects that help college students build real skills, grow their careers, and meet new people.",
     location="Irvine, CA",
     uni="UCI",
@@ -93,13 +95,22 @@ User prompt: {user_prompt}
     return response.text.strip()
 
 
-def prompt_gemini_highschool(user_prompt="Find local opportunities for a high school student interested in Computer Science to build experience through clubs, competitions, volunteer work, and skill development.",
-                              location="Irvine, CA", highschool="Northwood High School", year="11th Grade",
-                              careers="Software Engineer", college="UC Berkeley",
-                              clubs="Robotics Club, Coding Club", sports="Tennis", volunteering="Library Volunteer",
-                              coursework="AP Computer Science, Honors Math", skills="Python, Java",
-                              awards="Hackathon Winner, Math Olympiad", certifications="AWS Cloud Practitioner",
-                              other="Interested in AI and building apps"):
+def prompt_gemini_highschool(
+    user_prompt="Find local opportunities for a high school student interested in Computer Science to build experience through clubs, competitions, volunteer work, and skill development.",
+    location="Irvine, CA",
+    highschool="Northwood High School",
+    year="11th Grade",
+    careers="Software Engineer",
+    college="UC Berkeley",
+    clubs="Robotics Club, Coding Club",
+    sports="Tennis",
+    volunteering="Library Volunteer",
+    coursework="AP Computer Science, Honors Math",
+    skills="Python, Java",
+    awards="Hackathon Winner, Math Olympiad",
+    certifications="AWS Cloud Practitioner",
+    other="Interested in AI and building apps",
+):
     full_prompt = f"""
 You are an assistant that recommends **events, programs, activities, and opportunities** for a high school student based on their profile.
 
@@ -158,7 +169,6 @@ if __name__ == "__main__":
     # result = prompt_gemini_college(user_prompt)
     # print(result)
     print(prompt_gemini_highschool())
-
 
 
 # good test prompt below

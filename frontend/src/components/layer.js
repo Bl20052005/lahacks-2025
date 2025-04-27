@@ -21,7 +21,7 @@ import { motion } from "framer-motion";
 import "./layer.css";
 import axios from "axios";
 import { transformToFlowSchema } from "./schemaToFlow";
-import updateFlowchart from "./updateFlowchart";
+import getNewFlowchart from "./getNewFlowchart";
 
 const dagreGraph = new dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
 const nodeWidth = 350;
@@ -64,14 +64,23 @@ const Layer = ({ nodes, edges, nodeData, dispatchLayerStates, layer }) => {
   const [n, setNodes, onNodesChange] = useNodesState(nodes);
   const [e, setEdges, onEdgesChange] = useEdgesState(edges);
 
-  async function fetchData() {
+  useEffect(() => {
+    if (nodes.length == 0 && edges.length == 0 && nodeData.length == 0) {
+      // fetchData();
+      const username = localStorage.getItem("username");
+      if (username) {
+        fetchData(username);
+      }
+    }
+  }, [nodes, edges, nodeData]);
+
+  async function fetchData(username) {
     try {
       const response = await axios.post(
-        "/api/location",
+        "/api/begin",
         {
-          user_prompt:
-            "Find opportunities for aspiring Software Engineers near Irvine across Hackathons, Clubs, and Volunteer Projects that help college students build real skills, grow their careers, and meet new people",
-          location: "Irvine",
+          theme: layer,
+          username: username,
         },
         {
           timeout: 2000000, // 20 seconds
@@ -120,7 +129,7 @@ const Layer = ({ nodes, edges, nodeData, dispatchLayerStates, layer }) => {
   const [fullscreen, setFullscreen] = useState(false);
 
   // Checkbox handler (optimistic update)
-  const handleCheck = (nodeIndex, checkIndex) => {
+  const handleCheck = (nodeIndex, checkIndex, nodeId) => {
     const updatedNodeData = nodeData.map((item, idx) => {
       if (idx === nodeIndex) {
         return {
@@ -142,14 +151,60 @@ const Layer = ({ nodes, edges, nodeData, dispatchLayerStates, layer }) => {
       payload: updatedNodeData,
     });
 
-    const allChecked = nodeData[nodeIndex].checkBox.every(
-      (check) => check.checked
-    );
+    // Create a copy of the checkbox array with the toggled value
+    const updatedCheckBox = nodeData[nodeIndex].checkBox.map((check, cIdx) => {
+      if (cIdx === checkIndex) {
+        return { ...check, checked: !check.checked };
+      }
+      return check;
+    });
+
+    // Check if all checkboxes are checked after the update
+    const allChecked = updatedCheckBox.every((check) => check.checked);
+
+    console.log(allChecked, updatedCheckBox);
+
     if (allChecked) {
       setModalOpen(false);
       // TODO: Backend API call to update the flowchart
 
-      updateFlowchart(nodeData, nodes, edges);
+      getNewFlowchart(nodeData, nodes, edges).then((result) => {
+        console.log(result);
+        const {
+          initialNodes: newNodes,
+          initialEdges: newEdges,
+          nodeData: newNodeData,
+        } = transformToFlowSchema(result.data, nodes.length, nodeId);
+
+        console.log(newNodes, newEdges, newNodeData);
+
+        const { nodes: finalNodes, edges: finalEdges } = getLayoutedElements(
+          [...nodes, ...newNodes],
+          [...edges, ...newEdges],
+          "TB"
+        );
+
+        dispatchLayerStates({
+          type: "SET_ARRAY",
+          layer: layer,
+          array: "nodes",
+          payload: finalNodes,
+        });
+
+        dispatchLayerStates({
+          type: "SET_ARRAY",
+          layer: layer,
+          array: "edges",
+          payload: finalEdges,
+        });
+
+        dispatchLayerStates({
+          type: "SET_ARRAY",
+          layer: layer,
+          array: "nodeData",
+          payload: [...nodeData, ...newNodeData],
+        });
+      });
       // Uncomment the following line to send the updated node data to the backend
       // await axios.post("/api/updateFlowchart", { nodeData: updatedNodeData });
     }
@@ -247,13 +302,45 @@ const Layer = ({ nodes, edges, nodeData, dispatchLayerStates, layer }) => {
                 return (
                   <div
                     key={index}
-                    style={{ display: "flex", alignItems: "center" }}
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
                   >
                     <div>
                       <div key={item.id}>
                         <h3>{item?.description}</h3>
                         <a href={item?.link}>{item?.link}</a>
                       </div>
+                    </div>
+
+                    <div className="flex flex-col items-center justify-start mt-4">
+                      {item?.checkBox &&
+                        item.checkBox.map((check, checkIndex) => {
+                          return (
+                            <div
+                              key={checkIndex}
+                              style={{ marginLeft: 8 }}
+                              className="w-full"
+                            >
+                              <input
+                                type="checkbox"
+                                id={`check-${index}-${checkIndex}`}
+                                checked={check.checked}
+                                onChange={() =>
+                                  handleCheck(index, checkIndex, item.id)
+                                }
+                              />
+                              <label
+                                htmlFor={`check-${index}-${checkIndex}`}
+                                style={{ marginLeft: 8 }}
+                              >
+                                {check.label}
+                              </label>
+                            </div>
+                          );
+                        })}
                     </div>
                     {/* <input
                       type="checkbox"
