@@ -28,18 +28,17 @@ class MultiCategoryActivities(BaseModel):
 
 
 def prompt_gemini_college(
-    background={},
-    user_prompt="Find opportunities for aspiring Software Engineers near Irvine across Hackathons, Clubs, and Volunteer Projects that help college students build real skills, grow their careers, and meet new people.",
-    location="Irvine, CA",
-    uni="UCI",
-    major="Computer Science",
-    goal="software engineering",
-    company="Google",
+    user_prompt="N/A",
+    location="N/A",
+    uni="N/A",
+    major="N/A",
+    goal="N/A",
+    company="N/A",
     grad="N/A",
     exp="N/A",
-    clubs="Hack at UCI",
-    courses="Data Structures, Algorithms",
-    skills="Python, Java, C++",
+    clubs="N/A",
+    courses="N/A",
+    skills="N/A",
     orgs="N/A",
     other="N/A",
 ):
@@ -95,22 +94,13 @@ User prompt: {user_prompt}
     return response.text.strip()
 
 
-def prompt_gemini_highschool(
-    user_prompt="Find local opportunities for a high school student interested in Computer Science to build experience through clubs, competitions, volunteer work, and skill development.",
-    location="Irvine, CA",
-    highschool="Northwood High School",
-    year="11th Grade",
-    careers="Software Engineer",
-    college="UC Berkeley",
-    clubs="Robotics Club, Coding Club",
-    sports="Tennis",
-    volunteering="Library Volunteer",
-    coursework="AP Computer Science, Honors Math",
-    skills="Python, Java",
-    awards="Hackathon Winner, Math Olympiad",
-    certifications="AWS Cloud Practitioner",
-    other="Interested in AI and building apps",
-):
+def prompt_gemini_highschool(user_prompt="N/A",
+                              location="N/A", highschool="N/A", year="N/A",
+                              careers="N/A", college="N/A",
+                              clubs="N/A", sports="N/A", volunteering="N/A",
+                              coursework="N/A", skills="N/A",
+                              awards="N/A", certifications="N/A",
+                              other="N/A"):
     full_prompt = f"""
 You are an assistant that recommends **events, programs, activities, and opportunities** for a high school student based on their profile.
 
@@ -154,7 +144,7 @@ Respond ONLY with the JSON object — no extra explanation.
 User prompt: {user_prompt}
 """
     response = client.models.generate_content(
-        model="gemini-2.5-pro-exp-03-25",
+        model="gemini-2.5-flash-preview-04-17",
         contents=full_prompt,
         config={
             "response_mime_type": "application/json",
