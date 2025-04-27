@@ -17,7 +17,7 @@ const CreateAccountForm = () => {
     e.preventDefault();
   
     try {
-      const response = await fetch("http://localhost:5000/register", {
+      const response = await fetch("http://localhost:5001/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -28,10 +28,12 @@ const CreateAccountForm = () => {
       const result = await response.json();
   
       if (response.ok) {
-        console.log("Account created:", result);
-        if (formData.education === "highschool") {
+        console.log("Account created:", result, formData, formData.education);
+        
+
+        if (formData.education === "highSchool") {
           router.push("/forms");
-        } else if (formData.education === "college") {
+        } else  {
           router.push("/collegeforms");
         }
       } else {

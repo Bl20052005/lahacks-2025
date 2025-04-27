@@ -4,6 +4,7 @@
   },
   "dependencies": {
     "axios": "^1.9.0",
+    "mongodb": "^6.16.0",
     "zod": "^3.24.3"
   }
 }

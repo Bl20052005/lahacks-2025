@@ -33,7 +33,7 @@ const CreateAccountHighSchool = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/college-form", {
+      const response = await fetch("http://localhost:5001/college-form", {
         method: "POST",
         credentials: "include",
         headers: {
