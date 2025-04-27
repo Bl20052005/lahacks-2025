@@ -2,6 +2,8 @@ from flask import Flask, request, jsonify, session
 from pymongo import MongoClient
 import linked_spam
 
+from bson.objectid import ObjectId
+
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from location_query import prompt_gemini_college
@@ -99,14 +101,17 @@ def get_all_linked_data():
 
 @app.route("/api/college-form", methods=["POST"])
 def college_form():
-    data = json.loads(request.get_json())
+    data = request.get_json()
+    print(type(data), data)
     if data is None:
         return jsonify({"error": "No data provided"}), 400
     data["user_id"] = session["user_id"]
     print(data)
     db3 = client["users"]
-    collection3 = db3["form-input"]
-    collection3.insert_one(data)
+    collection3 = db3["users"]
+    collection3.find_one_and_update(
+        {"_id": ObjectId(data["user_id"])}, {"$set": data}, upsert=True
+    )
     return jsonify({"message": "Data inserted successfully"}), 200
 
 
@@ -131,8 +136,10 @@ def hs_form():
     data["user_id"] = session["user_id"]
     print(data)
     db3 = client["users"]
-    collection3 = db3["form-input"]
-    collection3.insert_one(data)
+    collection3 = db3["users"]
+    collection3.find_one_and_update(
+        {"_id": ObjectId(data["user_id"])}, {"$set": data}, upsert=True
+    )
     return jsonify({"message": "Data inserted successfully"}), 200
 
 
