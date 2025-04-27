@@ -62,7 +62,6 @@ for profile in collection.find():
     for edu in education:
         degree = edu.get("degree", "").strip()
         school = edu.get("school_name", "").strip()
-
         if degree:
             degree_counter[degree] += 1
         if school:
