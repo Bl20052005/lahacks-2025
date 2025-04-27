@@ -50,7 +50,11 @@ def spam_linkd(query, limit=30, school=None):
             collection2.update_one({"profile.id": existing_user["profile"]["id"]}, {"$set": result})
             print(f"Updated user: {existing_user['profile']['name']} with new data.")
 
+def length_of_mongdb():
+    db2 = client['linkedin-data']
+    collection2 = db2['ld']
+    count = collection2.count_documents({})
+    print(f"Number of documents in the collection: {count}")
+
 if __name__ == "__main__":
-    booll = True
-    while booll:
-        spam_linkd("product manager", limit=30)
+    length_of_mongdb()

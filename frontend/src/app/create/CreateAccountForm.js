@@ -29,7 +29,11 @@ const CreateAccountForm = () => {
   
       if (response.ok) {
         console.log("Account created:", result);
-        router.push("/login");
+        if (formData.education === "highschool") {
+          router.push("/forms");
+        } else if (formData.education === "college") {
+          router.push("/collegeforms");
+        }
       } else {
         console.error("Signup failed:", result.error);
       }
@@ -72,7 +76,7 @@ const CreateAccountForm = () => {
         </div>
         <Button
           type="submit"
-          className="self-center mt-16 w-[187px] max-md:mt-10"
+          className="self-center mt-16 w-[200px] max-md:mt-10"
         >
           Create Account
         </Button>

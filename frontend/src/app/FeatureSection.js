@@ -10,7 +10,7 @@ const FeatureSection = ({
         <h2 className="self-start text-5xl font-bold text-white max-md:text-4xl whitespace-pre-line">
           {title}
         </h2>
-        <p className="mt-14 text-2xl font-medium leading-10 text-stone-300 max-md:mt-10 max-md:max-w-full">
+        <p className="mt-14 text-2xl font-normal leading-10 text-stone-300 max-md:mt-10 max-md:max-w-full">
           {description}
         </p>
       </div>

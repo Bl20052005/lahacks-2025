@@ -1,14 +1,60 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import FormSection from "./HSFormSection";
 import InputField from "./HSInputField";
 import FormColumn from "./HSFormColumn";
 import SubmitButton from "./HSSubmitButton";
 
 const CreateAccountHighSchool = () => {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission
+  const [formData, setFormData] = React.useState({
+    highSchool: "",
+    year: "",
+    location: "",
+    careers: "",
+    college: "",
+    clubs: "",
+    sports: "",
+    volunteer: "",
+    coursework: "",
+    skills: "",
+    awards: "",
+    certifications: "",
+    other: "",
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();    
+    try {
+      const response = await fetch("http://localhost:5000/hs-form", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      const result = await response.json();
+      
+      if (response.ok) {
+        console.log("Form submitted successfully", result, formData);
+        // Optionally reset form or show success message
+      } else {
+        console.error("Submission failed", result.error);
+        // Optionally show error message to user
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      // Optionally show network error to user
+    }
   };
 
   return (
@@ -34,52 +80,116 @@ const CreateAccountHighSchool = () => {
               <FormColumn>
                 <FormSection title="Core Info*">
                   <div className="flex gap-5 max-md:flex-col">
-                    <InputField label="What high school do you attend?" />
-                    <InputField label="What year are you in high school?" />
+                    <InputField
+                      name="highSchool"
+                      label="What high school do you attend?"
+                      value={formData.highSchool}
+                      onChange={handleInputChange}
+                    />
+                    <InputField
+                      name="year"
+                      label="What year are you in high school?"
+                      value={formData.year}
+                      onChange={handleInputChange}
+                    />
                   </div>
                   <div className="flex gap-5 mt-5 max-md:flex-col">
-                    <InputField label="Where do you live?" />
+                    <InputField
+                      name="location"
+                      label="Where do you live?"
+                      value={formData.location}
+                      onChange={handleInputChange}
+                    />
                   </div>
                 </FormSection>
 
                 <FormSection title="Interests & Goals">
                   <div className="flex gap-5 max-md:flex-col">
-                    <InputField label="What careers are you interested in?" />
-                    <InputField label="What college do you aspire to attend?" />
+                    <InputField
+                      name="careers"
+                      label="What careers are you interested in?"
+                      value={formData.careers}
+                      onChange={handleInputChange}
+                    />
+                    <InputField
+                      name="college"
+                      label="What college do you aspire to attend?"
+                      value={formData.college}
+                      onChange={handleInputChange}
+                    />
                   </div>
                 </FormSection>
 
                 <FormSection title="Extracurriculars">
                   <div className="flex gap-5 max-md:flex-col">
-                    <InputField label="Club involvement?" />
-                    <InputField label="Sports?" />
+                    <InputField
+                      name="clubs"
+                      label="Club involvement?"
+                      value={formData.clubs}
+                      onChange={handleInputChange}
+                    />
+                    <InputField
+                      name="sports"
+                      label="Sports?"
+                      value={formData.sports}
+                      onChange={handleInputChange}
+                    />
                   </div>
                   <div className="flex gap-5 mt-5 max-md:flex-col">
-                    <InputField label="Volunteer activities?" />
+                    <InputField
+                      name="volunteer"
+                      label="Volunteer activities?"
+                      value={formData.volunteer}
+                      onChange={handleInputChange}
+                    />
                   </div>
                 </FormSection>
 
                 <FormSection title="Skills">
                   <div className="flex gap-5 max-md:flex-col">
-                    <InputField label="Relevant coursework (AP, honors, community college)?" />
-                    <InputField label="General skills?" />
+                    <InputField
+                      name="coursework"
+                      label="Relevant coursework (AP, honors, community college)?"
+                      value={formData.coursework}
+                      onChange={handleInputChange}
+                    />
+                    <InputField
+                      name="skills"
+                      label="General skills?"
+                      value={formData.skills}
+                      onChange={handleInputChange}
+                    />
                   </div>
                 </FormSection>
 
                 <FormSection title="Awards & Certificates">
                   <div className="flex gap-5 max-md:flex-col">
-                    <InputField label="Competition and awards?" />
-                    <InputField label="Certifications?" />
+                    <InputField
+                      name="awards"
+                      label="Competition and awards?"
+                      value={formData.awards}
+                      onChange={handleInputChange}
+                    />
+                    <InputField
+                      name="certifications"
+                      label="Certifications?"
+                      value={formData.certifications}
+                      onChange={handleInputChange}
+                    />
                   </div>
                 </FormSection>
 
                 <FormSection title="Other">
-                  <InputField multiline={true} className="h-24 w-full" />
+                  <InputField
+                    name="other"
+                    className="h-24 w-full"
+                    value={formData.other}
+                    onChange={handleInputChange}
+                  />
                 </FormSection>
               </FormColumn>
             </div>
           </div>
-
           <SubmitButton>Submit</SubmitButton>
         </form>
       </div>
