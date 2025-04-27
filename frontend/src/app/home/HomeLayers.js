@@ -6,6 +6,7 @@ import Skew from "@/components/Skew";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Typewriter from "typewriter-effect";
 
 export default function HomeLayers({ initialLayers }) {
   const [hovered, setHovered] = React.useState(null);
@@ -105,8 +106,45 @@ export default function HomeLayers({ initialLayers }) {
     <>
       <div className="bg-black">
         {selected === null && (
-          <div className="flex flex-col items-center justify-center w-full h-fit bg-gradient-to-b from-blue-950 to-blue-900">
-            <div className="relative w-[600px] h-[1000px] mt-[100px]">
+          <div className="flex flex-row justify-evenly w-full h-fit bg-gradient-to-b from-blue-950 to-blue-900 min-h-screen">
+            <div className="relative w-[40%] h-screen flex flex-col justify-evenly">
+              <div className="relative w-full ml-[30%]">
+                <div className="w-fit h-fit"></div>
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/c5586b64e133ede7f47c86a12bda4f008444326c?placeholderIfAbsent=true&apiKey=290f4fffa0494176920e5dddabb4296c"
+                  className="object-contain absolute top-4 left-[13%] shrink-0 mt-5 w-6 aspect-square"
+                  alt="Menu icon"
+                />
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/f889e319d79bf5e19de58793acb908f20457fb63?placeholderIfAbsent=true&apiKey=290f4fffa0494176920e5dddabb4296c"
+                  alt="Logo"
+                  className="object-contain absolute top-0 left-0 z-10 max-w-full aspect-[2.95] w-[300px]"
+                />
+              </div>
+
+              <div className="ml-16 mb-20">
+                <Typewriter
+                  onInit={(typewriter) => {
+                    typewriter
+                      .typeString(
+                        `<h1 style="color:white; font-size:2.5rem; font-weight:bold;">Loom - the most detailed guide you'll need</h1>`
+                      )
+                      .pauseFor(2000)
+                      .typeString(
+                        `<div style="color:white; font-size:1.5rem; margin-top:1.5rem;">with AI-powered suggestions, we'll ensure success!</div>`
+                      )
+                      .start();
+                  }}
+                  options={{
+                    delay: 35,
+                    html: true,
+                    cursor: "",
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className="relative w-[600px] h-[1000px] mt-[100px] ml-[150px] min-w-[40%]">
               {Object.keys(layerStates).map((item, i) => (
                 <Skew
                   key={i}
@@ -161,7 +199,7 @@ export default function HomeLayers({ initialLayers }) {
               />
               <button
                 onClick={() => setSelected(null)}
-                className="text-white absolute top-0 left-0"
+                className="text-white absolute top-0 left-0 p-4 m-4 bg-blue-800 rounded-full shadow-lg hover:bg-blue-700 transition duration-300 ease-in-out"
               >
                 &lt;
               </button>
