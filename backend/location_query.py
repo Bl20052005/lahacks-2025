@@ -15,7 +15,7 @@ class Activity(BaseModel):
     title: str
     description: str
     link: str
-
+    checkBox: List[str]
 
 class CategoryActivities(BaseModel):
     header: str

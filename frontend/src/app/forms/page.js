@@ -33,7 +33,7 @@ const CreateAccountHighSchool = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();    
     try {
-      const response = await fetch("http://localhost:5001/hs-form", {
+      const response = await fetch("/api/hs-form", {
         method: "POST",
         credentials: "include",
         headers: {

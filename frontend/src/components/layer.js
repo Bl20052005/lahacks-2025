@@ -21,6 +21,7 @@ import { motion } from "framer-motion";
 import "./layer.css";
 import axios from "axios";
 import { transformToFlowSchema } from "./schemaToFlow";
+import updateFlowchart from "./updateFlowchart";
 
 const dagreGraph = new dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
 const nodeWidth = 350;
@@ -58,12 +59,14 @@ const getLayoutedElements = (nodes, edges, direction = "TB") => {
   return { nodes: newNodes, edges };
 };
 
-const Layer = () => {
-  const [nodeData, setNodeData] = useState([]);
+const Layer = ({ nodes, edges, nodeData, dispatchLayerStates, layer }) => {
+  // const [nodeData, setNodeData] = useState([]);
+  const [n, setNodes, onNodesChange] = useNodesState(nodes);
+  const [e, setEdges, onEdgesChange] = useEdgesState(edges);
 
-  function fetchData() {
-    axios
-      .post(
+  async function fetchData() {
+    try {
+      const response = await axios.post(
         "/api/location",
         {
           user_prompt:
@@ -74,29 +77,42 @@ const Layer = () => {
           timeout: 2000000, // 20 seconds
           signal: AbortSignal.timeout(200000),
         }
-      )
-      .then((response) => {
-        const parsedResponse = JSON.parse(response.data);
-        console.log(response.data, parsedResponse);
-        const { initialNodes, initialEdges, nodeData } = transformToFlowSchema(
-          parsedResponse.data
-        );
-        const { nodes, edges } = getLayoutedElements(
-          initialNodes,
-          initialEdges,
-          "TB"
-        );
-        setNodes(nodes);
-        setEdges(edges);
-        setNodeData(nodeData);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }
+      );
+      const parsedResponse = JSON.parse(response.data);
+      console.log(response.data, parsedResponse);
+      const { initialNodes, initialEdges, nodeData } = transformToFlowSchema(
+        parsedResponse.data
+      );
+      const { nodes, edges } = getLayoutedElements(
+        initialNodes,
+        initialEdges,
+        "TB"
+      );
 
-  const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+      dispatchLayerStates({
+        type: "SET_ARRAY",
+        layer: layer,
+        array: "nodes",
+        payload: nodes,
+      });
+
+      dispatchLayerStates({
+        type: "SET_ARRAY",
+        layer: layer,
+        array: "edges",
+        payload: edges,
+      });
+
+      dispatchLayerStates({
+        type: "SET_ARRAY",
+        layer: layer,
+        array: "nodeData",
+        payload: nodeData,
+      });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
 
   // Modal state
   const [modalOpen, setModalOpen] = useState(false);
@@ -104,20 +120,38 @@ const Layer = () => {
   const [fullscreen, setFullscreen] = useState(false);
 
   // Checkbox handler (optimistic update)
-  const handleCheck = (index) => {
-    setCheckMarkItems((prev) =>
-      prev.map((item, i) =>
-        i === index ? { ...item, checked: !item.checked } : item
-      )
-    );
+  const handleCheck = (nodeIndex, checkIndex) => {
+    const updatedNodeData = nodeData.map((item, idx) => {
+      if (idx === nodeIndex) {
+        return {
+          ...item,
+          checkBox: item.checkBox.map((check, cIdx) => {
+            if (cIdx === checkIndex) {
+              return { ...check, checked: !check.checked };
+            }
+            return check;
+          }),
+        };
+      }
+      return item;
+    });
+    dispatchLayerStates({
+      type: "SET_ARRAY",
+      layer: layer,
+      array: "nodeData",
+      payload: updatedNodeData,
+    });
 
-    // TODO: call backend API here
-    // If all checkmarks are checked, close the modal
-    const allChecked = checkMarkItems.every((item, i) =>
-      i === index ? !item.checked : item.checked
+    const allChecked = nodeData[nodeIndex].checkBox.every(
+      (check) => check.checked
     );
     if (allChecked) {
       setModalOpen(false);
+      // TODO: Backend API call to update the flowchart
+
+      updateFlowchart(nodeData, nodes, edges);
+      // Uncomment the following line to send the updated node data to the backend
+      // await axios.post("/api/updateFlowchart", { nodeData: updatedNodeData });
     }
   };
 
@@ -194,7 +228,12 @@ const Layer = () => {
               </Button>
               <IconButton
                 onClick={() => setModalOpen(false)}
-                sx={{ color: "red", position: "absolute", top: "10px", left: "10px" }}
+                sx={{
+                  color: "red",
+                  position: "absolute",
+                  top: "10px",
+                  left: "10px",
+                }}
               >
                 x
               </IconButton>

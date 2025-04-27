@@ -12,7 +12,7 @@ export function transformToFlowSchema(data) {
   let nodeData = [];
   let initialEdges = [];
 
-  console.log(data)
+  console.log(data);
 
   data.forEach((datum, catIdx) => {
     // Optionally, add a category node (uncomment if you want category grouping)
@@ -59,10 +59,24 @@ export function transformToFlowSchema(data) {
         width: 350,
         height: 80,
       });
-      nodeData.push({
+      // If datumOfData does not have 'checkBox', add it with default value
+      const nodeDatum = {
         id: nodeId,
         ...datumOfData,
-      });
+      };
+      if (!("checkBox" in datumOfData)) {
+        nodeDatum.checkBox = [
+          { checked: false, label: "Finished everything here!" },
+        ];
+      } else {
+        nodeDatum.checkBox = datumOfData.checkBox.map((item) => {
+          return {
+            checked: false,
+            label: item
+          };
+        });
+      }
+      nodeData.push(nodeDatum);
       initialEdges.push({
         id: `e${startNodeId}-${nodeId}`,
         source: startNodeId,

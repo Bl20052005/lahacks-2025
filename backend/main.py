@@ -31,7 +31,7 @@ db = client["users"]
 collection = db["users"]
 
 
-@app.route("/register", methods=["POST"])
+@app.route("/api/register", methods=["POST"])
 def register():
     data = request.get_json()
     username = data.get("username")
@@ -59,7 +59,7 @@ def register():
     )
 
 
-@app.route("/login", methods=["POST"])
+@app.route("/api/login", methods=["POST"])
 def login():
     data = request.get_json()
     username = data.get("username")
@@ -97,9 +97,9 @@ def get_all_linked_data():
     return jsonify(all_data), 200
 
 
-@app.route("/college-form", methods=["POST"])
+@app.route("/api/college-form", methods=["POST"])
 def college_form():
-    data = request.get_json()
+    data = json.loads(request.get_json())
     if data is None:
         return jsonify({"error": "No data provided"}), 400
     data["user_id"] = session["user_id"]
@@ -123,7 +123,7 @@ def location():
     return jsonify(result), 200
 
 
-@app.route("/hs-form", methods=["POST"])
+@app.route("/api/hs-form", methods=["POST"])
 def hs_form():
     data = request.get_json()
     if data is None:
@@ -140,7 +140,7 @@ def hs_form():
 def update_nodes():
     data = request.get_json()
     if data is None:
-        return jsonify({"error": "No data provided"}), 400
+        return jsonify({"error": "No data provided"})
 
     response = requests.post(
         "http://localhost:7778/rest/post",
@@ -156,5 +156,14 @@ def update_nodes():
     return response.json()
 
 
+@app.route("/api/user-id", methods=["GET"])
+def get_user_id():
+    user_id = session.get("user_id")
+    if user_id:
+        return jsonify({"user_id": user_id}), 200
+    else:
+        return jsonify({"error": "User not logged in"}), 401
+
+
 if __name__ == "__main__":
-    app.run(debug=True, port=5001, host="0.0.0.0")
+    app.run(debug=True, port=5000, host="0.0.0.0")

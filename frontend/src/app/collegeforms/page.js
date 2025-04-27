@@ -33,7 +33,8 @@ const CreateAccountHighSchool = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5001/college-form", {
+      console.log(formData, "formData", JSON.stringify(formData))
+      const response = await fetch("/api/college-form", {
         method: "POST",
         credentials: "include",
         headers: {
