@@ -24,14 +24,14 @@ class MultiCategoryRecommendations(BaseModel):
 
 
 def prompt_gemini_skill_assessment(
-    user_prompt: str = "Assess my professional profile and suggest areas for skill improvement.",
-    industry: str = "Software Engineering",
-    company: str = "Google",
-    current_skills: str = "Python, Java, SQL",
-    projects: str = "E-commerce app, REST API",
-    education: str = "B.S. Computer Science",
-    certifications: str = "AWS Cloud Practitioner",
-    other: str = "Interested in scalable cloud architectures"
+    user_prompt: str = "N/A",
+    industry: str = "N/A",
+    company: str = "N/A",
+    current_skills: str = "N/A",
+    projects: str = "N/A",
+    education: str = "N/A",
+    certifications: str = "N/A",
+    other: str = "N/A"
 ) -> str:
     full_prompt = f"""
 You are an assistant that analyzes the user's professional profile and recommends targeted **skill development activities, resources, and opportunities** across multiple categories.
