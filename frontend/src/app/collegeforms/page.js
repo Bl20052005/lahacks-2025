@@ -4,8 +4,10 @@ import FormSection from "./FormSection";
 import InputField from "./InputField";
 import FormColumn from "./FormColumn";
 import SubmitButton from "./SubmitButton";
+import { useRouter } from "next/navigation";
 
 const CreateAccountHighSchool = () => {
+  const router = useRouter();
   const [formData, setFormData] = React.useState({
     college: "",
     year: "",
@@ -33,7 +35,6 @@ const CreateAccountHighSchool = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(formData, "formData", JSON.stringify(formData))
       const response = await fetch("/api/college-form", {
         method: "POST",
         credentials: "include",
@@ -47,6 +48,7 @@ const CreateAccountHighSchool = () => {
       
       if (response.ok) {
         console.log("Form submitted successfully", result);
+        router.push("../home")
         // Optionally reset form or show success message
       } else {
         console.error("Submission failed", result.error);

@@ -2,6 +2,8 @@
 import NavigationBar from "./NavigationBar";
 import HeroSection from "./HeroSection";
 import FeatureSection from "./FeatureSection";
+import FeatureSection2 from "./FeatureSection2";
+import FeatureSection3 from "./FeatureSection3";
 import BackgroundImage from "./BackgroundImage";
 import { motion } from "framer-motion";
 import { Link as ScrollLink } from "react-scroll"; 
@@ -56,7 +58,7 @@ function HomePage() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <FeatureSection
+            <FeatureSection2
               title={
                 <>
                   Smart Input, <br /> Smarter Insight
@@ -73,7 +75,7 @@ function HomePage() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <FeatureSection
+            <FeatureSection3
               title={
                 <>
                   Real Alumni, <br /> Real Journeys

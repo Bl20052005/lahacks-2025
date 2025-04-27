@@ -19,11 +19,11 @@ const FeatureSection = ({
 
   const DemoContent = () => (
     <div className="ml-5 w-[55%] max-md:ml-0 max-md:w-full">
-      <div
-        className={`flex shrink-0 mx-auto max-w-full bg-zinc-300 h-[362px] w-[599px] max-md:mt-10 ${demoClassName}`}
-        role="img"
-        aria-label="Feature demonstration"
-      />
+      <img
+  src="/flow.png"
+  alt="Feature demonstration"
+  className={`flex shrink-0 mx-auto max-w-full bg-zinc-300 h-[362px] w-[599px] max-md:mt-10 ${demoClassName}`}
+/>
     </div>
   );
 
