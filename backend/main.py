@@ -4,7 +4,7 @@ import linked_spam
 
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from location_query import prompt_gemini
+from location_query import prompt_gemini_college
 
 uri = "mongodb+srv://arnavpandey722:MpLlSmce2gtrDD7j@cluster0.x0voiss.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 
@@ -90,7 +90,8 @@ def location():
     user_prompt = data.get("user_prompt")
     location = data.get("location")
 
-    result = prompt_gemini(user_prompt, location if location is None else "Irvine, CA")
+    result = prompt_gemini_college(user_prompt, location if location is None else "Irvine, CA")
+    print(result)
     return jsonify(result), 200
 
 

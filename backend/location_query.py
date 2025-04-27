@@ -16,19 +16,31 @@ class Activity(BaseModel):
     description: str
     link: str
 
+
 class CategoryActivities(BaseModel):
-    category: str
-    activities: List[Activity]
+    header: str
+    data: List[Activity]
+
 
 class MultiCategoryActivities(BaseModel):
-    activities: List[CategoryActivities]
+    data: List[CategoryActivities]
 
 
-def prompt_gemini_college(user_prompt="Find opportunities for aspiring Software Engineers near Irvine across Hackathons, Clubs, and Volunteer Projects that help college students build real skills, grow their careers, and meet new people.",
-                   location="Irvine, CA", uni="UCI", major="Computer Science",
-                   goal="software engineering", company="Google", grad="N/A",
-                   exp="N/A", clubs="Hack at UCI", courses="Data Structures, Algorithms",
-                   skills="Python, Java, C++", orgs="N/A", other="N/A"):
+def prompt_gemini_college(
+    user_prompt="Find opportunities for aspiring Software Engineers near Irvine across Hackathons, Clubs, and Volunteer Projects that help college students build real skills, grow their careers, and meet new people.",
+    location="Irvine, CA",
+    uni="UCI",
+    major="Computer Science",
+    goal="software engineering",
+    company="Google",
+    grad="N/A",
+    exp="N/A",
+    clubs="Hack at UCI",
+    courses="Data Structures, Algorithms",
+    skills="Python, Java, C++",
+    orgs="N/A",
+    other="N/A",
+):
     full_prompt = f"""
 You are an assistant that recommends multiple **activities, events, or opportunities** for each category.
 
@@ -71,7 +83,7 @@ Respond ONLY with the JSON object — no extra text.
 User prompt: {user_prompt}
 """
     response = client.models.generate_content(
-        model="gemini-2.5-pro-exp-03-25",
+        model="gemini-2.5-flash-preview-04-17",
         contents=full_prompt,
         config={
             "response_mime_type": "application/json",
