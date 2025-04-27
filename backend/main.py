@@ -12,6 +12,9 @@ client = MongoClient(uri, server_api=ServerApi("1"))
 from flask import Flask, request, jsonify
 from flask_cors import CORS  # import this
 
+import requests
+import json
+
 app = Flask(__name__)
 CORS(
     app,
@@ -130,6 +133,26 @@ def hs_form():
     collection3 = db3["form-input"]
     collection3.insert_one(data)
     return jsonify({"message": "Data inserted successfully"}), 200
+
+
+@app.route("/update-nodes", methods=["POST"])
+def update_nodes():
+    data = request.get_json()
+    if data is None:
+        return jsonify({"error": "No data provided"}), 400
+
+    response = requests.post(
+        "http://localhost:7778/rest/post",
+        json={
+            "data": data["data"],
+            "skills": data["skills"],
+            "steps": data["steps"],
+        },
+        headers={"Content-Type": "application/json"},
+    )
+
+    print(response.json())
+    return response.json()
 
 
 if __name__ == "__main__":
