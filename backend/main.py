@@ -4,7 +4,7 @@ import linked_spam
 
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from location_query import prompt_gemini
+from location_query import prompt_gemini_college
 
 uri = "mongodb+srv://arnavpandey722:MpLlSmce2gtrDD7j@cluster0.x0voiss.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 
@@ -13,11 +13,15 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS  # import this
 
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:3000", "http://localhost:3001"], supports_credentials=True)
+CORS(
+    app,
+    # origins=["http://localhost:3000", "http://localhost:3001"],
+    # supports_credentials=True,
+)
 app.secret_key = "weiogjiowjgiowg"
 
 session = {}
-app.config['SESSION_TYPE'] = 'filesystem'
+app.config["SESSION_TYPE"] = "filesystem"
 
 db = client["users"]
 collection = db["users"]
@@ -64,9 +68,9 @@ def login():
     if not user:
         return jsonify({"error": "Invalid username or password"}), 401
 
-    session['user_id'] = str(user['_id'])  # Store user ID in session
-    print(session['user_id'])
-    return jsonify({"message": "Login successful", "user_id": str(user['_id'])}), 200
+    session["user_id"] = str(user["_id"])  # Store user ID in session
+    print(session["user_id"])
+    return jsonify({"message": "Login successful", "user_id": str(user["_id"])}), 200
 
 
 @app.route("/ld")
@@ -88,29 +92,45 @@ def get_all_linked_data():
     all_data = list(collection2.find())
     return jsonify(all_data), 200
 
+
 @app.route("/college-form", methods=["POST"])
 def college_form():
     data = request.get_json()
     if data is None:
         return jsonify({"error": "No data provided"}), 400
-    data["user_id"] = session['user_id']
+    data["user_id"] = session["user_id"]
     print(data)
-    db3 = client['users']
-    collection3 = db3['form-input']
+    db3 = client["users"]
+    collection3 = db3["form-input"]
     collection3.insert_one(data)
     return jsonify({"message": "Data inserted successfully"}), 200
+
+
+@app.route("/api/location", methods=["POST"])
+def location():
+    data = request.get_json()
+    user_prompt = data.get("user_prompt")
+    location = data.get("location")
+
+    result = prompt_gemini_college(
+        user_prompt, location if location is None else "Irvine, CA"
+    )
+    print(result)
+    return jsonify(result), 200
+
 
 @app.route("/hs-form", methods=["POST"])
 def hs_form():
     data = request.get_json()
     if data is None:
         return jsonify({"error": "No data provided"}), 400
-    data["user_id"] = session['user_id']
+    data["user_id"] = session["user_id"]
     print(data)
-    db3 = client['users']
-    collection3 = db3['form-input']
+    db3 = client["users"]
+    collection3 = db3["form-input"]
     collection3.insert_one(data)
     return jsonify({"message": "Data inserted successfully"}), 200
 
-if __name__ == '__main__':
-    app.run(debug=True, port=5000, host='0.0.0.0')
+
+if __name__ == "__main__":
+    app.run(debug=True, port=5001, host="0.0.0.0")

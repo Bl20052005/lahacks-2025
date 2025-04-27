@@ -20,78 +20,11 @@ import Button from "@mui/material/Button";
 import { motion } from "framer-motion";
 import "./layer.css";
 import axios from "axios";
-
-// Helper to generate unique node ids
-let id = 0;
-const getId = () => `node_${id++}`;
-
-const className = "bg-blue-950 text-white rounded-md px-4 py-2";
-
-const initialNodes = [
-  {
-    id: getId(),
-    data: { label: "Start Node" },
-    position: { x: 0, y: 0 },
-    width: 172,
-    height: 36,
-  },
-  {
-    id: getId(),
-    data: { label: "End Node" },
-    position: { x: 0, y: 0 },
-    width: 172,
-    height: 36,
-  },
-  {
-    id: getId(),
-    data: { label: "End Node" },
-    position: { x: 0, y: 0 },
-    width: 172,
-    height: 36,
-  },
-  {
-    id: getId(),
-    data: { label: "End Node" },
-    position: { x: 0, y: 0 },
-    width: 172,
-    height: 36,
-  },
-];
-
-const initialCheckMarkItems = [
-  { item: "example question", checked: false },
-  { item: "example question", checked: false },
-  { item: "example question", checked: false },
-];
-
-// Add an edge from Start Node to End Node with an arrow
-const initialEdges = [
-  {
-    id: "e0-1",
-    source: "node_0",
-    target: "node_1",
-    animated: false,
-    markerEnd: { type: "arrowclosed" },
-  },
-  {
-    id: "e0-2",
-    source: "node_0",
-    target: "node_2",
-    animated: false,
-    markerEnd: { type: "arrowclosed" },
-  },
-  {
-    id: "e0-3",
-    source: "node_0",
-    target: "node_3",
-    animated: true,
-    markerEnd: { type: "arrowclosed" },
-  },
-];
+import { transformToFlowSchema } from "./schemaToFlow";
 
 const dagreGraph = new dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
-const nodeWidth = 272;
-const nodeHeight = 66;
+const nodeWidth = 350;
+const nodeHeight = 120;
 
 const getLayoutedElements = (nodes, edges, direction = "TB") => {
   const isHorizontal = direction === "LR";
@@ -126,21 +59,49 @@ const getLayoutedElements = (nodes, edges, direction = "TB") => {
 };
 
 const Layer = () => {
-  const layoutedEdges = getLayoutedElements(initialNodes, initialEdges).edges;
-  const layoutedNodes = getLayoutedElements(initialNodes, initialEdges).nodes;
+  const [nodeData, setNodeData] = useState([]);
 
-  const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
+  function fetchData() {
+    axios
+      .post(
+        "/api/location",
+        {
+          user_prompt:
+            "Find opportunities for aspiring Software Engineers near Irvine across Hackathons, Clubs, and Volunteer Projects that help college students build real skills, grow their careers, and meet new people",
+          location: "Irvine",
+        },
+        {
+          timeout: 2000000, // 20 seconds
+          signal: AbortSignal.timeout(200000),
+        }
+      )
+      .then((response) => {
+        const parsedResponse = JSON.parse(response.data);
+        console.log(response.data, parsedResponse);
+        const { initialNodes, initialEdges, nodeData } = transformToFlowSchema(
+          parsedResponse.data
+        );
+        const { nodes, edges } = getLayoutedElements(
+          initialNodes,
+          initialEdges,
+          "TB"
+        );
+        setNodes(nodes);
+        setEdges(edges);
+        setNodeData(nodeData);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }
 
-  console.log(edges, nodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
   // Modal state
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedNode, setSelectedNode] = useState(null);
   const [fullscreen, setFullscreen] = useState(false);
-
-  // Checkmark state (will eventually be per-node and from backend)
-  const [checkMarkItems, setCheckMarkItems] = useState(initialCheckMarkItems);
 
   // Checkbox handler (optimistic update)
   const handleCheck = (index) => {
@@ -178,14 +139,16 @@ const Layer = () => {
         padding: "16px",
       }}
     >
+      <button onClick={fetchData}>fetchData</button>
       <ReactFlow
         nodes={nodes}
-        edges={initialEdges}
+        edges={edges}
         onNodeClick={handleNodeClick}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         fitViewOptions={{ padding: 0 }}
       ></ReactFlow>
+
       {modalOpen && (
         <Box
           component={motion.div}
@@ -200,7 +163,8 @@ const Layer = () => {
             height: "100%",
             width: fullscreen ? "100%" : 400,
             maxWidth: "100%",
-            bgcolor: "background.paper",
+            bgcolor: "#010045",
+            color: "#fff",
             boxShadow: 3,
             zIndex: 10,
             display: "flex",
@@ -216,7 +180,7 @@ const Layer = () => {
               alignItems: "center",
             }}
           >
-            <h2 style={{ margin: 0 }}>
+            <h2 style={{ marginTop: "40px", fontSize: 20 }}>
               {selectedNode ? selectedNode.data.label : ""}
             </h2>
             <Box>
@@ -228,28 +192,42 @@ const Layer = () => {
               >
                 {fullscreen ? "Exit Fullscreen" : "Fullscreen"}
               </Button>
-              <IconButton onClick={() => setModalOpen(false)}>x</IconButton>
+              <IconButton
+                onClick={() => setModalOpen(false)}
+                sx={{ color: "red", position: "absolute", top: "10px", left: "10px" }}
+              >
+                x
+              </IconButton>
             </Box>
           </Box>
           <Box sx={{ flex: 1, mt: 2 }}>
             {/* Modal content goes here */}
             {selectedNode &&
-              checkMarkItems.map((item, index) => (
-                <div
-                  key={index}
-                  style={{ display: "flex", alignItems: "center" }}
-                >
-                  <input
-                    type="checkbox"
-                    id={`check-${index}`}
-                    checked={item.checked}
-                    onChange={() => handleCheck(index)}
-                  />
-                  <label htmlFor={`check-${index}`} style={{ marginLeft: 8 }}>
-                    {item.item}
-                  </label>
-                </div>
-              ))}
+              nodeData.map((item, index) => {
+                if (item.id !== selectedNode.id) return null;
+                return (
+                  <div
+                    key={index}
+                    style={{ display: "flex", alignItems: "center" }}
+                  >
+                    <div>
+                      <div key={item.id}>
+                        <h3>{item?.description}</h3>
+                        <a href={item?.link}>{item?.link}</a>
+                      </div>
+                    </div>
+                    {/* <input
+                      type="checkbox"
+                      id={`check-${index}`}
+                      checked={item.checked}
+                      onChange={() => handleCheck(index)}
+                    />
+                    <label htmlFor={`check-${index}`} style={{ marginLeft: 8 }}>
+                      {item.item}
+                    </label> */}
+                  </div>
+                );
+              })}
           </Box>
         </Box>
       )}

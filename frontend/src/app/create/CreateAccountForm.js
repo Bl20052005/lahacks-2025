@@ -17,7 +17,7 @@ const CreateAccountForm = () => {
     e.preventDefault();
   
     try {
-      const response = await fetch("http://localhost:5000/register", {
+      const response = await fetch("http://localhost:5001/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -28,8 +28,14 @@ const CreateAccountForm = () => {
       const result = await response.json();
   
       if (response.ok) {
-        console.log("Account created:", result);
-        router.push("/login"); // Redirect to the login page after successful signup
+        console.log("Account created:", result, formData, formData.education);
+        
+
+        if (formData.education === "highSchool") {
+          router.push("/forms");
+        } else  {
+          router.push("/collegeforms");
+        }
       } else {
         console.error("Signup failed:", result.error);
       }
