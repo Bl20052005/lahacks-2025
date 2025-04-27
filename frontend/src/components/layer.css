@@ -1,11 +1,37 @@
+@keyframes appear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .react-flow__node {
   background: #002c6e;
   color: white;
+  animation: appear 1s ease-in-out forwards;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  cursor: pointer;
 }
 
-.react-flow__edges {
+.react-flow__edge {
   background-color: #0054d3;
   stroke: #0054d3;
   fill: #0054d3;
   stroke-width: 2px;
+  animation: appear 1s ease-in-out forwards;
+  cursor: pointer;
+}
+
+.react-flow__node.visible {
+  opacity: 1;
+  transform: translateY(0);
 }

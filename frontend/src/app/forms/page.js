@@ -50,25 +50,8 @@ const CreateAccountHighSchool = () => {
                 </FormSection>
 
                 <FormSection title="Extracurriculars">
-<<<<<<< HEAD
                   <div className="flex gap-5 max-md:flex-col">
                     <InputField label="Club involvement?" />
-=======
-                  <InputField label="Club involvement?" />
-                  <InputField label="Volunteer activities?" />
-                </FormSection>
-              </FormColumn>
-
-              <FormColumn>
-                <div className="fl</FormSection>ex flex-col self-stretch my-auto text-base text-black max-md:mt-10">
-                  <div className="mt-16 max-md:mt-20">
-                    <InputField label="What year are you in high school?" />
-                  </div>
-                  <div className="mt-40 max-md:mt-10">
-                    <InputField label="What college do you aspire to attend?" />
-                  </div>
-                  <div className="mt-40 max-md:mt-10">
->>>>>>> 9547fe3 (gemini hackathons, clubs)
                     <InputField label="Sports?" />
                   </div>
                   <div className="flex gap-5 mt-5 max-md:flex-col">
@@ -91,10 +74,7 @@ const CreateAccountHighSchool = () => {
                 </FormSection>
 
                 <FormSection title="Other">
-                  <InputField
-                    multiline={true}
-                    className="h-24 w-full"
-                  />
+                  <InputField multiline={true} className="h-24 w-full" />
                 </FormSection>
               </FormColumn>
             </div>
