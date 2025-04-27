@@ -29,7 +29,11 @@ const CreateAccountForm = () => {
   
       if (response.ok) {
         console.log("Account created:", result);
-        router.push("/login"); // Redirect to the login page after successful signup
+        if (formData.education === "highschool") {
+          router.push("/forms");
+        } else if (formData.education === "college") {
+          router.push("/collegeforms");
+        }
       } else {
         console.error("Signup failed:", result.error);
       }
