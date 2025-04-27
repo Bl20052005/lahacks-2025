@@ -19,12 +19,13 @@ app = Flask(__name__)
 CORS(
     app,
     # origins=["http://localhost:3000", "http://localhost:3001"],
-    # supports_credentials=True,
+    supports_credentials=True,
 )
 app.secret_key = "weiogjiowjgiowg"
 
-session = {}
-app.config["SESSION_TYPE"] = "filesystem"
+# session = {}
+# app.config["SESSION_TYPE"] = "filesystem"
+# uncomment the two line above if cookies are not working, but it will not work in production
 
 db = client["users"]
 collection = db["users"]

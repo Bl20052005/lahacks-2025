@@ -34,6 +34,7 @@ export function LoginForm() {
   
       if (response.ok) {
         console.log("Login successful:", result);
+        router.push("/home");
       } else {
         console.error("Login failed:", result.error);
       }
