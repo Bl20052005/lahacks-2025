@@ -28,9 +28,7 @@ const CreateAccountForm = () => {
       const result = await response.json();
   
       if (response.ok) {
-        console.log("Account created:", result, formData, formData.education);
-        
-
+       
         if (formData.education === "highSchool") {
           router.push("/forms");
         } else  {

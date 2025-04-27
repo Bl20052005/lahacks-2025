@@ -4,8 +4,10 @@ import FormSection from "./HSFormSection";
 import InputField from "./HSInputField";
 import FormColumn from "./HSFormColumn";
 import SubmitButton from "./HSSubmitButton";
+import { useRouter } from "next/navigation";
 
 const CreateAccountHighSchool = () => {
+  const router = useRouter()
   const [formData, setFormData] = React.useState({
     highSchool: "",
     year: "",
@@ -45,6 +47,7 @@ const CreateAccountHighSchool = () => {
       const result = await response.json();
       
       if (response.ok) {
+        router.push("../home");
         console.log("Form submitted successfully", result, formData);
         // Optionally reset form or show success message
       } else {
